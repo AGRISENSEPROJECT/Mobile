@@ -90,7 +90,7 @@ export default function NotificationBell({ color = '#fff', size = 24 }: Props) {
                   <View style={styles.emptyIcon}>
                     <Ionicons name="notifications-outline" size={28} color={colors.brand} />
                   </View>
-                  <Text style={styles.emptyTitle}>You're all caught up</Text>
+                  <Text style={styles.emptyTitle}>You&apos;re all caught up</Text>
                   <Text style={styles.emptyBody}>
                     Community posts, comments, and new recommendations will show up here.
                   </Text>

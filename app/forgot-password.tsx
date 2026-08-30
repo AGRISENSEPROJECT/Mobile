@@ -65,7 +65,7 @@ export default function ForgotPassword() {
             <View style={styles.content}>
                 <Text style={styles.title}>Forgot Password</Text>
                 <Text style={styles.subtitle}>
-                    Enter your email address and we'll send you a 6-digit code to reset your password.
+                    Enter your email address and we&apos;ll send you a 6-digit code to reset your password.
                 </Text>
 
                 <TextInput

@@ -214,7 +214,7 @@ export default function SignIn() {
                     </View>
 
                     <View className="flex-row justify-center mt-8 mb-10">
-                        <Text className="text-gray-500">Don't have an account? </Text>
+                        <Text className="text-gray-500">Don&apos;t have an account? </Text>
                         <TouchableOpacity onPress={() => router.push('/signup')}>
                             <Text className="text-[#0B4D26] font-semibold">Sign up</Text>
                         </TouchableOpacity>

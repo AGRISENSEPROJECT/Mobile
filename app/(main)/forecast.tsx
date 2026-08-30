@@ -9,10 +9,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { SidebarContext } from '../../context/SidebarContext';
-
-const API_KEY = '4a681263221d7d234ffedd87dc199cab';
+import { getCurrentWeather, getWeatherForecast } from '@/services/weatherApi';
 
 type DayForecast = {
   key: string;
@@ -64,14 +62,8 @@ export default function Forecast() {
         const lon = params.lon ? Number(params.lon) : 30.0605;
 
         const [currentRes, forecastRes] = await Promise.all([
-          axios.get(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
-            { timeout: 10000 },
-          ),
-          axios.get(
-            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
-            { timeout: 10000 },
-          ),
+          getCurrentWeather(lat, lon),
+          getWeatherForecast(lat, lon),
         ]);
 
         setLocation(`${currentRes.data.name}, ${currentRes.data.sys.country}`);
@@ -146,10 +138,10 @@ export default function Forecast() {
     <View style={styles.screen}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => (toggleSidebar ? toggleSidebar() : router.back())}
+          onPress={toggleSidebar}
           style={styles.iconBtn}
         >
-          <Ionicons name={toggleSidebar ? 'menu-outline' : 'arrow-back'} size={24} color="#0B4D26" />
+          <Ionicons name="menu-outline" size={24} color="#0B4D26" />
         </TouchableOpacity>
         <View style={styles.headerTitleWrap}>
           <Ionicons name="partly-sunny-outline" size={20} color="#0B4D26" />

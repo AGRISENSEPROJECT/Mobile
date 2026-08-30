@@ -7,7 +7,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import DaySelector from '../../components/weather/DaySelector';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,8 +14,7 @@ import * as Location from 'expo-location';
 import { useSidebar } from '../../context/SidebarContext';
 import NotificationBell from '@/components/NotificationBell';
 import { WeatherSkeleton } from '@/components/ui/Skeleton';
-
-const API_KEY = '4a681263221d7d234ffedd87dc199cab';
+import { getCurrentWeather, getWeatherForecast } from '@/services/weatherApi';
 
 type HourItem = {
   time: string;
@@ -106,12 +104,9 @@ export default function Weather() {
       setLoading(true);
       setError(null);
 
-      const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${API_KEY}&units=metric`;
-      const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${API_KEY}&units=metric`;
-
       const [currentResponse, forecastResponse] = await Promise.all([
-        axios.get(currentWeatherUrl, { timeout: 10000 }),
-        axios.get(forecastUrl, { timeout: 10000 }),
+        getCurrentWeather(coordinates.lat, coordinates.lon),
+        getWeatherForecast(coordinates.lat, coordinates.lon),
       ]);
 
       const currentData = currentResponse.data;

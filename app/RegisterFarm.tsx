@@ -416,7 +416,7 @@ export default function RegisterFarm() {
 
             {phase === 'identity' ? (
                 <Text style={styles.skipHint}>
-                    You can explore the app now. We'll remind you to verify your National ID before full farm onboarding.
+                    You can explore the app now. We&apos;ll remind you to verify your National ID before full farm onboarding.
                 </Text>
             ) : null}
 
@@ -497,7 +497,7 @@ export default function RegisterFarm() {
                     <View>
                         <Text style={styles.title}>Location</Text>
                         <Text style={styles.subtitle}>
-                            Enter your farm's location details to receive accurate insights and recommendations. Provide your Country, District, Sector, Cell, and Village!
+                            Enter your farm&apos;s location details to receive accurate insights and recommendations. Provide your Country, District, Sector, Cell, and Village!
                         </Text>
 
                         <TouchableOpacity style={styles.dropdownTrigger} onPress={() => toggleDropdown('country')}>

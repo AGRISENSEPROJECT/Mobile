@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "agrisense",
+    "name": "AgriSense",
     "slug": "agrisense",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
-    "scheme": "your-app-scheme",
+    "icon": "./assets/images/icon.png",
+    "scheme": "agrisense",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -16,7 +16,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "resize"
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.agrisense"
     },
     "web": {
       "bundler": "metro",
@@ -47,6 +52,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "83db31f1-b49c-4708-8c6c-a133eef7c9a3"
+      }
     }
   }
 }
