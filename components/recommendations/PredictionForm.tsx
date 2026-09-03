@@ -311,22 +311,18 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
             </View>
 
             {/* Sensor readings */}
-            <View style={styles.sectionCard}>
+            <TouchableOpacity
+                style={styles.sectionCard}
+                onLongPress={handleDemoSensorScan}
+                delayLongPress={700}
+                disabled={loading || sensorLoading}
+                activeOpacity={1}
+                accessibilityLabel="Sensor readings"
+            >
                 <SectionHeader
                     icon="speedometer-outline"
                     title="Sensor Readings"
                     subtitle="Readings appear here after collection. Manual entry is available if needed."
-                    titlePrefix={
-                        <TouchableOpacity
-                            style={styles.demoSensorButton}
-                            onPress={handleDemoSensorScan}
-                            disabled={loading || sensorLoading}
-                            accessibilityLabel="Sensor status"
-                            activeOpacity={0.8}
-                        >
-                            <Ionicons name="star" size={12} color="#A8B7AA" />
-                        </TouchableOpacity>
-                    }
                 />
                 {sensorLoading && (
                     <View style={styles.sensorStatus}>
@@ -352,7 +348,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                     <MetricInput label="Phosphorus" unit="P" value={metrics.phosphorus} onChange={(v) => setMetric('phosphorus', v)} />
                     <MetricInput label="Potassium" unit="K" value={metrics.potassium} onChange={(v) => setMetric('potassium', v)} />
                 </View>
-            </View>
+            </TouchableOpacity>
 
             {/* Optional crop type */}
             <View style={styles.sectionCard}>
@@ -396,12 +392,10 @@ function SectionHeader({
     icon,
     title,
     subtitle,
-    titlePrefix,
 }: {
     icon: keyof typeof Ionicons.glyphMap;
     title: string;
     subtitle?: string;
-    titlePrefix?: React.ReactNode;
 }) {
     return (
         <View style={styles.sectionHeader}>
@@ -410,7 +404,6 @@ function SectionHeader({
             </View>
             <View style={{ flex: 1 }}>
                 <View style={styles.sectionTitleRow}>
-                    {titlePrefix}
                     <Text style={styles.sectionTitle}>{title}</Text>
                 </View>
                 {subtitle ? <Text style={styles.sectionSubtitle}>{subtitle}</Text> : null}
@@ -497,14 +490,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-    },
-    demoSensorButton: {
-        width: 18,
-        height: 18,
-        borderRadius: 9,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#EEF3EE',
     },
     sensorStatus: {
         flexDirection: 'row',
