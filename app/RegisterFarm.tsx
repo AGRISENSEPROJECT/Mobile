@@ -320,11 +320,12 @@ export default function RegisterFarm() {
             setSuccessVisible(true);
         } catch (error: any) {
             setLoading(false);
+            const message = error?.message || 'Failed to register farm';
             setStatusModal({
                 visible: true,
                 type: 'error',
                 title: 'Registration Failed',
-                message: error.message || 'Failed to register farm',
+                message,
             });
         }
     };

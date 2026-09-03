@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { authApi, predictionsApi, Recommendation } from '@/services/api';
@@ -14,9 +14,9 @@ import { useSidebar } from '@/context/SidebarContext';
 
 const CATEGORIES = [
     { type: 'crop', icon: 'leaf-outline' as const, emoji: '🌱', title: 'Crop Recommendations', subtitle: 'Best crops based on soil, weather, and market demand.' },
-    { type: 'irrigation', icon: 'water-outline' as const, emoji: '💧', title: 'Irrigation Recommendation', subtitle: 'Monitor soil moisture, watering schedules, rainfall forecasts.' },
-    { type: 'disease', icon: 'bug-outline' as const, emoji: '🦠', title: 'Pest & Disease Recommendations', subtitle: 'Detect issues early and protect your crops.' },
-    { type: 'fertilizer', icon: 'flask-outline' as const, emoji: '🌾', title: 'Fertilizer Recommendations', subtitle: 'Optimize soil nutrients for better yields.' },
+    { type: 'irrigation', icon: 'water-outline' as const, emoji: '💧', title: 'Irrigation Recommendation', subtitle: 'When and how much to water.' },
+    { type: 'disease', icon: 'bug-outline' as const, emoji: '🦠', title: 'Pest & Disease Recommendations', subtitle: 'What to watch for and how to protect the crop.' },
+    { type: 'fertilizer', icon: 'flask-outline' as const, emoji: '🌾', title: 'Fertilizer Recommendations', subtitle: 'Simple soil improvement advice.' },
     { type: 'weather', icon: 'cloudy-outline' as const, emoji: '☁️', title: 'Weather Recommendations', subtitle: 'Get real-time weather insights for better farm decisions.' },
 ];
 
@@ -158,12 +158,40 @@ function buildCards(item: Recommendation, type: string) {
     if (type === 'crop') {
         const best = cropName(item);
         cards.push({
-            label: 'Best Crop',
+            label: 'Best Crop / Igihingwa Cyiza',
             value: best || null,
             fallback: 'No clear winner yet — try another sensor profile',
         });
+        const farmerSummary = cleanText(p.farmer_summary || p.summary || p.recommendation);
+        const kinyarwandaAdvice = cleanText(p.inama_mu_kinyarwanda || p.kinyarwanda_advice);
+        const readings = cleanText(p.soil_readings || p.sensor_readings || p.readings);
+        const whyThisCrop = cleanText(p.why_this_crop || p.reason || p.description);
+        if (farmerSummary) {
+            cards.push({
+                label: 'Simple Advice',
+                value: farmerSummary,
+            });
+        }
+        if (kinyarwandaAdvice) {
+            cards.push({
+                label: 'Inama mu Kinyarwanda',
+                value: kinyarwandaAdvice,
+            });
+        }
+        if (readings) {
+            cards.push({
+                label: 'Sensor Readings',
+                value: readings,
+            });
+        }
+        if (whyThisCrop) {
+            cards.push({
+                label: 'Why This Crop',
+                value: whyThisCrop,
+            });
+        }
         entries.forEach(([key, value]) => {
-            if (/confidence|suitability|best_?crop|crop$/i.test(key)) return;
+            if (/confidence|suitability|best_?crop|crop$|farmer_?summary|summary|recommendation|inama|kinyarwanda|soil_?readings|sensor_?readings|readings|why_?this_?crop|reason|description/i.test(key)) return;
             if (value != null && typeof value === 'object') return;
             cards.push({ label: humanize(key), value: formatEntry(key, value) });
         });
@@ -405,7 +433,6 @@ function UnavailablePanel({
 }
 
 export default function Recommends() {
-    const router = useRouter();
     const { toggleSidebar } = useSidebar();
     const params = useLocalSearchParams<{ predictionId?: string }>();
     const [view, setView] = useState<'loading' | 'list' | 'form'>('loading');
@@ -504,7 +531,9 @@ export default function Recommends() {
     const handlePredictionSuccess = async (result: any) => {
         const farmId = result?.soilScan?.farmId || selectedFarmId;
         if (farmId && farmId !== selectedFarmId) setSelectedFarmId(farmId);
-        const loaded = farmId ? await loadRecommendations(farmId) : [];
+        const loaded = result?.demoMode && Array.isArray(result?.recommendations)
+            ? result.recommendations
+            : farmId ? await loadRecommendations(farmId) : [];
         setItems(loaded);
         setFirstTime(false);
         const hasCrop = (result?.recommendations || loaded).some((r: any) => r.type === 'crop');

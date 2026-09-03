@@ -100,6 +100,19 @@ type Props = {
     firstTime?: boolean;
 };
 
+const DEMO_PROFILE = {
+    cropType: 'Sorghum',
+    metrics: {
+        temperature: '27',
+        humidity: '54',
+        rainfall: '410',
+        nitrogen: '28',
+        phosphorus: '18',
+        potassium: '32',
+        soilMoisture: '24',
+    },
+};
+
 export default function PredictionForm({ onSuccess, firstTime }: Props) {
     const router = useRouter();
     const [farms, setFarms] = useState<any[]>([]);
@@ -109,6 +122,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
     const [cropType, setCropType] = useState<string | null>(null);
     const [activePreset, setActivePreset] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState('Analyzing your soil...');
     const [loadingFarms, setLoadingFarms] = useState(true);
     const [statusModal, setStatusModal] = useState({
         visible: false,
@@ -146,6 +160,106 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
         if (!preset) return;
         setActivePreset(preset.id);
         setMetrics({ ...preset.metrics });
+        setCropType(preset.cropType);
+    };
+
+    const buildDemoResult = () => {
+        const now = new Date().toISOString();
+        const predictionId = `demo-sensor-${Date.now()}`;
+        const farmId = selectedFarmId || 'demo-farm';
+        const base = { predictionId, farmId, createdAt: now };
+
+        return {
+            demoMode: true,
+            soilScan: {
+                id: predictionId,
+                farmId,
+                soilMoisture: DEMO_PROFILE.metrics.soilMoisture,
+                nitrogen: DEMO_PROFILE.metrics.nitrogen,
+                phosphorus: DEMO_PROFILE.metrics.phosphorus,
+                potassium: DEMO_PROFILE.metrics.potassium,
+                temperature: DEMO_PROFILE.metrics.temperature,
+                humidity: DEMO_PROFILE.metrics.humidity,
+                rainfall: DEMO_PROFILE.metrics.rainfall,
+            },
+            recommendations: [
+                {
+                    id: `${predictionId}-crop`,
+                    ...base,
+                    type: 'crop',
+                    title: 'Sorghum',
+                    rank: 1,
+                    isPrimary: true,
+                    payload: {
+                        best_crop: 'Sorghum',
+                        confidence: 86,
+                        farmer_summary: 'Plant sorghum. It can grow well in this dry, low-nutrient soil and does not need much water.',
+                        inama_mu_kinyarwanda: 'Tera amasaka. Yihanganira ubutaka bwumye kandi bukennye ku ifumbire kurusha imboga nyinshi.',
+                        soil_readings: 'Moisture: 24%\nNitrogen: Low (28)\nPhosphorus: Low (18)\nPotassium: Medium-low (32)\nRainfall: 410 mm',
+                        why_this_crop: 'The scan shows dry soil with limited nitrogen and phosphorus. Sorghum is drought tolerant, handles weaker soil, and is a practical first recommendation before soil improvement.',
+                    },
+                },
+                {
+                    id: `${predictionId}-irrigation`,
+                    ...base,
+                    type: 'irrigation',
+                    title: 'Irrigation plan for sorghum',
+                    rank: 1,
+                    isPrimary: true,
+                    payload: {
+                        status: 'Dry but acceptable for sorghum establishment',
+                        soil_moisture: '24%',
+                        next_irrigation: 'Water lightly every 4 days for the first 2 weeks, then once per week if there is no rain.',
+                        recommended_water_mm: 18,
+                        rain_prediction: 'Low rainfall expected this week',
+                        tips: 'Use mulch around the box/plot to reduce evaporation. Avoid flooding because sorghum roots prefer firm, drained soil.',
+                    },
+                },
+                {
+                    id: `${predictionId}-fertilizer`,
+                    ...base,
+                    type: 'fertilizer',
+                    title: 'Soil improvement for sorghum',
+                    rank: 1,
+                    isPrimary: true,
+                    payload: {
+                        ph: '6.2',
+                        soil_npk_status: 'N: Low, P: Low, K: Medium-low',
+                        recommended_fertilizer: 'Small dose of NPK 17-17-17 at planting, then compost or manure before the next season.',
+                        organic_alternatives: 'Compost, well-rotted manure, and crop residues mixed into the top soil.',
+                        description: 'The soil can support sorghum, but adding organic matter will improve water holding and early root growth.',
+                    },
+                },
+                {
+                    id: `${predictionId}-disease`,
+                    ...base,
+                    type: 'disease',
+                    title: 'Pest prevention for sorghum',
+                    rank: 1,
+                    isPrimary: true,
+                    payload: {
+                        status: 'No active disease detected from current scan',
+                        symptoms: 'Watch for holes in young leaves, wilting shoots, or yellow patches.',
+                        treatment: 'Scout weekly. If stem borer or shoot fly appears, remove affected shoots and apply a locally approved low-toxicity pesticide only on damaged plants.',
+                        preventive_measures: 'Keep spacing open, remove old crop residues, and rotate with beans or groundnuts next season.',
+                    },
+                },
+                {
+                    id: `${predictionId}-weather`,
+                    ...base,
+                    type: 'weather',
+                    title: 'Weather outlook',
+                    rank: 1,
+                    isPrimary: true,
+                    payload: {
+                        today: { temperature: '27', humidity: '54', rainfall: '0' },
+                        tomorrow: { temperature: '28', humidity: '51', rainfall: '2' },
+                        alerts: 'Dry week ahead. Protect seedlings from heat stress.',
+                        recommended_actions: 'Plant in the evening or early morning and water after planting.',
+                    },
+                },
+            ],
+        };
     };
 
     const buildImageFile = (asset: ImagePicker.ImagePickerAsset) => {
@@ -221,6 +335,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
         }
 
         setLoading(true);
+        setLoadingText('Analyzing your soil...');
         try {
             const response = await predictionsApi.run({
                 farmId: selectedFarmId,
@@ -247,6 +362,23 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
         }
     };
 
+    const handleDemoSensorScan = async () => {
+        if (!selectedFarmId) {
+            setStatusModal({ visible: true, type: 'info', title: 'Farm Required', message: 'Please select a farm first. If you have none, register one from the sidebar.' });
+            return;
+        }
+        setActivePreset('demo-sensor');
+        setMetrics({ ...DEMO_PROFILE.metrics });
+        setCropType(DEMO_PROFILE.cropType);
+        setLoadingText('Collecting data from sensor...');
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 2200));
+        setLoadingText('Analyzing sensor readings...');
+        await new Promise(resolve => setTimeout(resolve, 900));
+        setLoading(false);
+        onSuccess(buildDemoResult());
+    };
+
     return (
         <ScrollView
             style={styles.screen}
@@ -261,9 +393,18 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                 <View style={{ flex: 1 }}>
                     <Text style={styles.introTitle}>New Soil Analysis</Text>
                     <Text style={styles.introText}>
-                        Add a soil photo and readings. You can use a scenario while sensors are not connected.
+                        Add a soil photo and readings to get the best crop and farm advice.
                     </Text>
                 </View>
+                <TouchableOpacity
+                    style={styles.demoSensorButton}
+                    onPress={handleDemoSensorScan}
+                    disabled={loading}
+                    accessibilityLabel="Collect sensor data"
+                    activeOpacity={0.8}
+                >
+                    <Ionicons name="star" size={16} color="#C6A231" />
+                </TouchableOpacity>
             </View>
 
             {firstTime && (
@@ -396,7 +537,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                 {loading ? (
                     <View style={styles.loadingRow}>
                         <ActivityIndicator color="white" />
-                        <Text style={styles.mainButtonText}>  Analyzing your soil...</Text>
+                        <Text style={styles.mainButtonText}>  {loadingText}</Text>
                     </View>
                 ) : (
                     <Text style={styles.mainButtonText}>Get Recommendations</Text>
@@ -501,6 +642,16 @@ const styles = StyleSheet.create({
         color: '#111827',
         fontSize: 17,
         fontWeight: '800',
+    },
+    demoSensorButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFF7D6',
+        borderWidth: 1,
+        borderColor: '#E8D58A',
     },
     introText: {
         color: '#4B5563',
