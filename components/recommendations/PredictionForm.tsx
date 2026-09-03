@@ -40,61 +40,6 @@ const EMPTY_METRICS: Metrics = {
     soilMoisture: '',
 };
 
-/** Three sensor profiles tuned to the model’s crop suitability bands (temp / humidity / rainfall). */
-const MOCK_PRESETS: {
-    id: string;
-    label: string;
-    hint: string;
-    cropType: string;
-    metrics: Metrics;
-}[] = [
-    {
-        id: 'potatoes',
-        label: 'Highland Potatoes',
-        hint: 'Cool, humid, mid rainfall → Irish Potatoes',
-        cropType: 'Irish Potatoes',
-        metrics: {
-            temperature: '18',
-            humidity: '72',
-            rainfall: '580',
-            nitrogen: '45',
-            phosphorus: '35',
-            potassium: '50',
-            soilMoisture: '42',
-        },
-    },
-    {
-        id: 'rice',
-        label: 'Valley Rice',
-        hint: 'Warm, very wet → rice',
-        cropType: 'rice',
-        metrics: {
-            temperature: '28',
-            humidity: '82',
-            rainfall: '1100',
-            nitrogen: '90',
-            phosphorus: '40',
-            potassium: '40',
-            soilMoisture: '68',
-        },
-    },
-    {
-        id: 'tomatoes',
-        label: 'Garden Tomatoes',
-        hint: 'Mild, drier air → Tomatoes',
-        cropType: 'Tomatoes',
-        metrics: {
-            temperature: '24',
-            humidity: '58',
-            rainfall: '480',
-            nitrogen: '55',
-            phosphorus: '45',
-            potassium: '60',
-            soilMoisture: '34',
-        },
-    },
-];
-
 type Props = {
     onSuccess: (result: any) => void;
     firstTime?: boolean;
@@ -120,9 +65,11 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
     const [image, setImage] = useState<{ uri: string; name: string; type: string } | null>(null);
     const [metrics, setMetrics] = useState<Metrics>(EMPTY_METRICS);
     const [cropType, setCropType] = useState<string | null>(null);
-    const [activePreset, setActivePreset] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('Analyzing your soil...');
+    const [sensorLoading, setSensorLoading] = useState(false);
+    const [sensorLoadingText, setSensorLoadingText] = useState('');
+    const [demoSensorReady, setDemoSensorReady] = useState(false);
     const [loadingFarms, setLoadingFarms] = useState(true);
     const [statusModal, setStatusModal] = useState({
         visible: false,
@@ -151,115 +98,8 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
 
     const setMetric = (key: keyof Metrics, value: string) => {
         const clean = value.replace(/[^0-9.]/g, '');
-        setActivePreset(null);
+        setDemoSensorReady(false);
         setMetrics(prev => ({ ...prev, [key]: clean }));
-    };
-
-    const applyPreset = (presetId: string) => {
-        const preset = MOCK_PRESETS.find(p => p.id === presetId);
-        if (!preset) return;
-        setActivePreset(preset.id);
-        setMetrics({ ...preset.metrics });
-        setCropType(preset.cropType);
-    };
-
-    const buildDemoResult = () => {
-        const now = new Date().toISOString();
-        const predictionId = `demo-sensor-${Date.now()}`;
-        const farmId = selectedFarmId || 'demo-farm';
-        const base = { predictionId, farmId, createdAt: now };
-
-        return {
-            demoMode: true,
-            soilScan: {
-                id: predictionId,
-                farmId,
-                soilMoisture: DEMO_PROFILE.metrics.soilMoisture,
-                nitrogen: DEMO_PROFILE.metrics.nitrogen,
-                phosphorus: DEMO_PROFILE.metrics.phosphorus,
-                potassium: DEMO_PROFILE.metrics.potassium,
-                temperature: DEMO_PROFILE.metrics.temperature,
-                humidity: DEMO_PROFILE.metrics.humidity,
-                rainfall: DEMO_PROFILE.metrics.rainfall,
-            },
-            recommendations: [
-                {
-                    id: `${predictionId}-crop`,
-                    ...base,
-                    type: 'crop',
-                    title: 'Sorghum',
-                    rank: 1,
-                    isPrimary: true,
-                    payload: {
-                        best_crop: 'Sorghum',
-                        confidence: 86,
-                        farmer_summary: 'Plant sorghum. It can grow well in this dry, low-nutrient soil and does not need much water.',
-                        inama_mu_kinyarwanda: 'Tera amasaka. Yihanganira ubutaka bwumye kandi bukennye ku ifumbire kurusha imboga nyinshi.',
-                        soil_readings: 'Moisture: 24%\nNitrogen: Low (28)\nPhosphorus: Low (18)\nPotassium: Medium-low (32)\nRainfall: 410 mm',
-                        why_this_crop: 'The scan shows dry soil with limited nitrogen and phosphorus. Sorghum is drought tolerant, handles weaker soil, and is a practical first recommendation before soil improvement.',
-                    },
-                },
-                {
-                    id: `${predictionId}-irrigation`,
-                    ...base,
-                    type: 'irrigation',
-                    title: 'Irrigation plan for sorghum',
-                    rank: 1,
-                    isPrimary: true,
-                    payload: {
-                        status: 'Dry but acceptable for sorghum establishment',
-                        soil_moisture: '24%',
-                        next_irrigation: 'Water lightly every 4 days for the first 2 weeks, then once per week if there is no rain.',
-                        recommended_water_mm: 18,
-                        rain_prediction: 'Low rainfall expected this week',
-                        tips: 'Use mulch around the box/plot to reduce evaporation. Avoid flooding because sorghum roots prefer firm, drained soil.',
-                    },
-                },
-                {
-                    id: `${predictionId}-fertilizer`,
-                    ...base,
-                    type: 'fertilizer',
-                    title: 'Soil improvement for sorghum',
-                    rank: 1,
-                    isPrimary: true,
-                    payload: {
-                        ph: '6.2',
-                        soil_npk_status: 'N: Low, P: Low, K: Medium-low',
-                        recommended_fertilizer: 'Small dose of NPK 17-17-17 at planting, then compost or manure before the next season.',
-                        organic_alternatives: 'Compost, well-rotted manure, and crop residues mixed into the top soil.',
-                        description: 'The soil can support sorghum, but adding organic matter will improve water holding and early root growth.',
-                    },
-                },
-                {
-                    id: `${predictionId}-disease`,
-                    ...base,
-                    type: 'disease',
-                    title: 'Pest prevention for sorghum',
-                    rank: 1,
-                    isPrimary: true,
-                    payload: {
-                        status: 'No active disease detected from current scan',
-                        symptoms: 'Watch for holes in young leaves, wilting shoots, or yellow patches.',
-                        treatment: 'Scout weekly. If stem borer or shoot fly appears, remove affected shoots and apply a locally approved low-toxicity pesticide only on damaged plants.',
-                        preventive_measures: 'Keep spacing open, remove old crop residues, and rotate with beans or groundnuts next season.',
-                    },
-                },
-                {
-                    id: `${predictionId}-weather`,
-                    ...base,
-                    type: 'weather',
-                    title: 'Weather outlook',
-                    rank: 1,
-                    isPrimary: true,
-                    payload: {
-                        today: { temperature: '27', humidity: '54', rainfall: '0' },
-                        tomorrow: { temperature: '28', humidity: '51', rainfall: '2' },
-                        alerts: 'Dry week ahead. Protect seedlings from heat stress.',
-                        recommended_actions: 'Plant in the evening or early morning and water after planting.',
-                    },
-                },
-            ],
-        };
     };
 
     const buildImageFile = (asset: ImagePicker.ImagePickerAsset) => {
@@ -330,7 +170,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
         const required: (keyof Metrics)[] = ['temperature', 'humidity', 'rainfall', 'nitrogen', 'phosphorus', 'potassium'];
         const missing = required.filter(key => metrics[key] === '');
         if (missing.length > 0) {
-            setStatusModal({ visible: true, type: 'info', title: 'Readings Required', message: 'Please fill in all sensor readings, or pick one of the 3 mock sensor profiles above.' });
+            setStatusModal({ visible: true, type: 'info', title: 'Readings Required', message: 'Please collect sensor readings or enter them manually before continuing.' });
             return;
         }
 
@@ -348,7 +188,9 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                 potassium: metrics.potassium,
                 cropType: cropType || undefined,
                 soilMoisture: metrics.soilMoisture || undefined,
+                demoSensor: demoSensorReady,
             });
+            setDemoSensorReady(false);
             onSuccess(response);
         } catch (error: any) {
             setStatusModal({
@@ -367,16 +209,18 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
             setStatusModal({ visible: true, type: 'info', title: 'Farm Required', message: 'Please select a farm first. If you have none, register one from the sidebar.' });
             return;
         }
-        setActivePreset('demo-sensor');
+        setDemoSensorReady(false);
+        setSensorLoadingText('Connecting to soil sensor...');
+        setSensorLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        setSensorLoadingText('Collecting moisture and NPK readings...');
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        setSensorLoadingText('Calibrating soil nutrient values...');
+        await new Promise(resolve => setTimeout(resolve, 10000));
         setMetrics({ ...DEMO_PROFILE.metrics });
         setCropType(DEMO_PROFILE.cropType);
-        setLoadingText('Collecting data from sensor...');
-        setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 2200));
-        setLoadingText('Analyzing sensor readings...');
-        await new Promise(resolve => setTimeout(resolve, 900));
-        setLoading(false);
-        onSuccess(buildDemoResult());
+        setDemoSensorReady(true);
+        setSensorLoading(false);
     };
 
     return (
@@ -393,18 +237,9 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                 <View style={{ flex: 1 }}>
                     <Text style={styles.introTitle}>New Soil Analysis</Text>
                     <Text style={styles.introText}>
-                        Add a soil photo and readings to get the best crop and farm advice.
+                        Connect your soil sensor or add a soil photo to get the best crop and farm advice.
                     </Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.demoSensorButton}
-                    onPress={handleDemoSensorScan}
-                    disabled={loading}
-                    accessibilityLabel="Collect sensor data"
-                    activeOpacity={0.8}
-                >
-                    <Ionicons name="star" size={16} color="#C6A231" />
-                </TouchableOpacity>
             </View>
 
             {firstTime && (
@@ -477,35 +312,37 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
 
             {/* Sensor readings */}
             <View style={styles.sectionCard}>
-                <SectionHeader icon="speedometer-outline" title="Sensor Readings" subtitle="Fill manually or choose a mock scenario." />
-                <View style={styles.presetList}>
-                    {MOCK_PRESETS.map(preset => {
-                        const selected = activePreset === preset.id;
-                        return (
-                            <TouchableOpacity
-                                key={preset.id}
-                                style={[styles.presetCard, selected && styles.presetCardActive]}
-                                onPress={() => applyPreset(preset.id)}
-                                activeOpacity={0.85}
-                            >
-                                <View style={{ flex: 1 }}>
-                                    <Text style={[styles.presetLabel, selected && styles.presetLabelActive]}>
-                                        {preset.label}
-                                    </Text>
-                                    <Text style={[styles.presetSub, selected && styles.presetSubActive]}>
-                                        {preset.hint}
-                                    </Text>
-                                </View>
-                                {selected ? (
-                                    <Ionicons name="checkmark-circle" size={22} color="#0B4D26" />
-                                ) : (
-                                    <Text style={styles.usePresetText}>Use</Text>
-                                )}
-                            </TouchableOpacity>
-                        );
-                    })}
-                </View>
-
+                <SectionHeader
+                    icon="speedometer-outline"
+                    title="Sensor Readings"
+                    subtitle="Readings appear here after collection. Manual entry is available if needed."
+                    titlePrefix={
+                        <TouchableOpacity
+                            style={styles.demoSensorButton}
+                            onPress={handleDemoSensorScan}
+                            disabled={loading || sensorLoading}
+                            accessibilityLabel="Sensor status"
+                            activeOpacity={0.8}
+                        >
+                            <Ionicons name="star" size={12} color="#A8B7AA" />
+                        </TouchableOpacity>
+                    }
+                />
+                {sensorLoading && (
+                    <View style={styles.sensorStatus}>
+                        <ActivityIndicator color="#0B4D26" size="small" />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.sensorStatusTitle}>Sensor collection in progress</Text>
+                            <Text style={styles.sensorStatusText}>{sensorLoadingText}</Text>
+                        </View>
+                    </View>
+                )}
+                {demoSensorReady && !sensorLoading && (
+                    <View style={styles.sensorReady}>
+                        <Ionicons name="checkmark-circle" size={18} color="#0B4D26" />
+                        <Text style={styles.sensorReadyText}>Sensor readings collected</Text>
+                    </View>
+                )}
                 <View style={styles.metricsGrid}>
                     <MetricInput label="Temperature" unit="°C" value={metrics.temperature} onChange={(v) => setMetric('temperature', v)} />
                     <MetricInput label="Humidity" unit="%" value={metrics.humidity} onChange={(v) => setMetric('humidity', v)} />
@@ -533,7 +370,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.mainButton} onPress={handleSubmit} disabled={loading}>
+            <TouchableOpacity style={styles.mainButton} onPress={handleSubmit} disabled={loading || sensorLoading}>
                 {loading ? (
                     <View style={styles.loadingRow}>
                         <ActivityIndicator color="white" />
@@ -555,14 +392,27 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
     );
 }
 
-function SectionHeader({ icon, title, subtitle }: { icon: keyof typeof Ionicons.glyphMap; title: string; subtitle?: string }) {
+function SectionHeader({
+    icon,
+    title,
+    subtitle,
+    titlePrefix,
+}: {
+    icon: keyof typeof Ionicons.glyphMap;
+    title: string;
+    subtitle?: string;
+    titlePrefix?: React.ReactNode;
+}) {
     return (
         <View style={styles.sectionHeader}>
             <View style={styles.sectionIcon}>
                 <Ionicons name={icon} size={18} color="#0B4D26" />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>{title}</Text>
+                <View style={styles.sectionTitleRow}>
+                    {titlePrefix}
+                    <Text style={styles.sectionTitle}>{title}</Text>
+                </View>
                 {subtitle ? <Text style={styles.sectionSubtitle}>{subtitle}</Text> : null}
             </View>
         </View>
@@ -643,15 +493,58 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '800',
     },
+    sectionTitleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
     demoSensorButton: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
+        width: 18,
+        height: 18,
+        borderRadius: 9,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFF7D6',
+        backgroundColor: '#EEF3EE',
+    },
+    sensorStatus: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        backgroundColor: '#E8F5E9',
         borderWidth: 1,
-        borderColor: '#E8D58A',
+        borderColor: '#B7D7BE',
+        borderRadius: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        marginTop: -2,
+        marginBottom: 14,
+    },
+    sensorStatusTitle: {
+        color: '#0B4D26',
+        fontSize: 13,
+        fontWeight: '800',
+    },
+    sensorStatusText: {
+        color: '#34643F',
+        fontSize: 12,
+        fontWeight: '600',
+        marginTop: 2,
+    },
+    sensorReady: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        backgroundColor: '#F1F8F2',
+        borderRadius: 10,
+        paddingHorizontal: 11,
+        paddingVertical: 8,
+        marginTop: -2,
+        marginBottom: 14,
+    },
+    sensorReadyText: {
+        color: '#0B4D26',
+        fontSize: 12,
+        fontWeight: '800',
     },
     introText: {
         color: '#4B5563',
@@ -795,52 +688,6 @@ const styles = StyleSheet.create({
         height: 28,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    presetList: {
-        gap: 10,
-        marginBottom: 14,
-    },
-    presetCard: {
-        backgroundColor: '#FAFAF7',
-        borderWidth: 1,
-        borderColor: '#E5E7EB',
-        borderRadius: 14,
-        paddingVertical: 12,
-        paddingHorizontal: 14,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-    },
-    presetCardActive: {
-        backgroundColor: '#E8F5E9',
-        borderColor: '#0B4D26',
-    },
-    presetLabel: {
-        color: '#111827',
-        fontSize: 14,
-        fontWeight: '800',
-    },
-    presetLabelActive: {
-        color: '#0B4D26',
-    },
-    presetSub: {
-        color: '#6B7280',
-        fontSize: 12,
-        marginTop: 3,
-        fontWeight: '500',
-    },
-    presetSubActive: {
-        color: '#34643F',
-    },
-    usePresetText: {
-        color: '#0B4D26',
-        fontSize: 12,
-        fontWeight: '800',
-        backgroundColor: '#E8F5E9',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 999,
-        overflow: 'hidden',
     },
     metricsGrid: {
         flexDirection: 'row',

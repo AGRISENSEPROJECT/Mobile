@@ -1,5 +1,4 @@
 import { View, Text, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { RecommendScreenHeader } from '@/components/RecommendScreenHeader';
 import { RecommendCard } from '@/components/RecommendCard';
 
@@ -17,31 +16,37 @@ export default function PestDiseaseRecommendation() {
         <ScrollView showsVerticalScrollIndicator={false} className="gap-3">
           <RecommendCard
             title="Detected Issue"
-            value="Leaf Rust (Wheat)"
+            value="No active disease detected for sorghum"
             icon="warning"
             iconColor="#EAB308"
           />
           <RecommendCard
-            title="Symptoms"
-            value="Yellowish-brown patches on leaves"
+            title="Pest Risk"
+            value="Monitor for stem borer and shoot fly on young plants"
             icon="bug"
             iconColor="#92400E"
           />
           <RecommendCard
-            title="Recommended Treatment"
-            value="Neem Oil Spray | Copper Fungicide"
+            title="Pesticide Recommendation"
+            value="Neem-based botanical spray or locally approved pyrethroid"
             icon="leaf"
             iconColor="#34643F"
           />
           <RecommendCard
+            title="Application Rate"
+            value="Spray affected leaves and stems lightly; follow product label"
+            icon="flask-outline"
+            iconColor="#34643F"
+          />
+          <RecommendCard
             title="Preventive Measures"
-            value="Crop rotation | Intercropping"
+            value="Remove affected shoots | Rotate with beans or groundnuts"
             icon="checkmark-done-circle"
             iconColor="#22C55E"
           />
           <RecommendCard
             title="Spraying Schedule"
-            value="Best Time: Early Morning or Late Evening"
+            value="Inspect after 7 days; repeat only if new damage appears"
             icon="time-outline"
             iconColor="#9CA3AF"
           />

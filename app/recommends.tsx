@@ -330,6 +330,30 @@ function buildCards(item: Recommendation, type: string) {
                 value: `🌿 ${formatEntry('treatment', p.treatment || p.recommended_treatment)}`,
             });
         }
+        if (p.pesticide || p.recommended_pesticide) {
+            cards.push({
+                label: 'Pesticide Recommendation',
+                value: formatEntry('pesticide', p.pesticide || p.recommended_pesticide),
+            });
+        }
+        if (p.dosage || p.application_rate) {
+            cards.push({
+                label: 'Application Rate',
+                value: formatEntry('dosage', p.dosage || p.application_rate),
+            });
+        }
+        if (p.schedule || p.spraying_schedule) {
+            cards.push({
+                label: 'Spraying Schedule',
+                value: formatEntry('schedule', p.schedule || p.spraying_schedule),
+            });
+        }
+        if (p.safety || p.safety_precautions) {
+            cards.push({
+                label: 'Safety Precautions',
+                value: formatEntry('safety', p.safety || p.safety_precautions),
+            });
+        }
         if (p.preventive_measures || p.prevention) {
             cards.push({ label: 'Preventive Measures', value: `🔄 ${formatEntry('prevention', p.preventive_measures || p.prevention)}` });
         }
@@ -748,7 +772,7 @@ export default function Recommends() {
                                     <ResultFieldCard
                                         label="Alternative Crops"
                                         value={alternativeCrops.length > 0 ? alternativeCrops.join(', ') : null}
-                                        fallback="No alternatives this round — try another mock sensor profile to compare crops"
+                                        fallback="No strong alternatives from this sensor reading"
                                     />
                                 )}
 

@@ -875,6 +875,7 @@ export type PredictionInput = {
     potassium: string;
     cropType?: string;
     soilMoisture?: string;
+    demoSensor?: boolean;
 };
 
 export const predictionsApi = {
@@ -905,6 +906,7 @@ export const predictionsApi = {
         formData.append('potassium', input.potassium);
         if (input.cropType) formData.append('crop_type', input.cropType);
         if (input.soilMoisture) formData.append('soil_moisture', input.soilMoisture);
+        if (input.demoSensor) formData.append('demo_sensor', 'true');
 
         return await authenticatedFetch('/api/predictions/run', {
             method: 'POST',
