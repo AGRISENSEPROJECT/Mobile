@@ -366,12 +366,14 @@ export default function ManageFarms() {
               <TextInput
                 style={styles.input}
                 placeholder="Farm name"
+                placeholderTextColor="#8A968B"
                 value={form.farmName}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, farmName: text }))}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Farm size"
+                placeholderTextColor="#8A968B"
                 keyboardType="numeric"
                 value={form.farmSize}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, farmSize: text }))}
@@ -425,12 +427,14 @@ export default function ManageFarms() {
                 <TextInput
                   style={[styles.input, styles.columnInput]}
                   placeholder="Province"
+                  placeholderTextColor="#8A968B"
                   value={form.province}
                   onChangeText={(text) => setForm((prev) => ({ ...prev, province: text }))}
                 />
                 <TextInput
                   style={[styles.input, styles.columnInput]}
                   placeholder="District"
+                  placeholderTextColor="#8A968B"
                   value={form.district}
                   onChangeText={(text) => setForm((prev) => ({ ...prev, district: text }))}
                 />
@@ -439,12 +443,14 @@ export default function ManageFarms() {
                 <TextInput
                   style={[styles.input, styles.columnInput]}
                   placeholder="Sector"
+                  placeholderTextColor="#8A968B"
                   value={form.sector}
                   onChangeText={(text) => setForm((prev) => ({ ...prev, sector: text }))}
                 />
                 <TextInput
                   style={[styles.input, styles.columnInput]}
                   placeholder="Cell"
+                  placeholderTextColor="#8A968B"
                   value={form.cell}
                   onChangeText={(text) => setForm((prev) => ({ ...prev, cell: text }))}
                 />
@@ -452,6 +458,7 @@ export default function ManageFarms() {
               <TextInput
                 style={styles.input}
                 placeholder="Village"
+                placeholderTextColor="#8A968B"
                 value={form.village}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, village: text }))}
               />
@@ -459,12 +466,14 @@ export default function ManageFarms() {
               <TextInput
                 style={styles.input}
                 placeholder="Owner name"
+                placeholderTextColor="#8A968B"
                 value={form.ownerName}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, ownerName: text }))}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Owner email"
+                placeholderTextColor="#8A968B"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={form.emailAddress}
@@ -473,6 +482,7 @@ export default function ManageFarms() {
               <TextInput
                 style={styles.input}
                 placeholder="Phone number"
+                placeholderTextColor="#8A968B"
                 keyboardType="phone-pad"
                 value={form.phoneNumber}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, phoneNumber: text }))}
@@ -480,18 +490,21 @@ export default function ManageFarms() {
               <TextInput
                 style={styles.input}
                 placeholder="Irrigation method"
+                placeholderTextColor="#8A968B"
                 value={form.irrigationMethod}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, irrigationMethod: text }))}
               />
               <TextInput
                 style={styles.input}
-                placeholder="Crop history"
+                placeholder="Crop history, comma separated"
+                placeholderTextColor="#8A968B"
                 value={form.cropHistory}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, cropHistory: text }))}
               />
               <TextInput
                 style={[styles.input, styles.textArea]}
                 placeholder="Farming practices"
+                placeholderTextColor="#8A968B"
                 multiline
                 value={form.farmingPractices}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, farmingPractices: text }))}
@@ -499,6 +512,7 @@ export default function ManageFarms() {
               <TextInput
                 style={[styles.input, styles.textArea]}
                 placeholder="Soil information"
+                placeholderTextColor="#8A968B"
                 multiline
                 value={form.soilInformation}
                 onChangeText={(text) => setForm((prev) => ({ ...prev, soilInformation: text }))}
@@ -531,13 +545,13 @@ export default function ManageFarms() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FAF3',
+    backgroundColor: '#F6F8F1',
   },
   header: {
     backgroundColor: '#0B4D26',
     paddingHorizontal: 18,
     paddingTop: 10,
-    paddingBottom: 18,
+    paddingBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -569,14 +583,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   summaryText: {
-    color: '#667085',
+    color: '#66736B',
     fontSize: 13,
     marginTop: 3,
   },
   addButton: {
     minWidth: 92,
     height: 42,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: '#0B4D26',
     flexDirection: 'row',
     alignItems: 'center',
@@ -604,7 +618,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   emptyText: {
-    color: '#667085',
+    color: '#66736B',
     fontSize: 14,
     lineHeight: 20,
     textAlign: 'center',
@@ -614,7 +628,7 @@ const styles = StyleSheet.create({
   emptyButton: {
     marginTop: 18,
     height: 42,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: '#0B4D26',
     justifyContent: 'center',
     paddingHorizontal: 18,
@@ -624,12 +638,17 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   farmCard: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E4E9DE',
+    borderColor: '#E2E8D8',
+    shadowColor: '#12351E',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
   farmTopRow: {
     flexDirection: 'row',
@@ -639,7 +658,7 @@ const styles = StyleSheet.create({
   farmIcon: {
     width: 42,
     height: 42,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: '#EAF5EC',
     alignItems: 'center',
     justifyContent: 'center',
@@ -654,7 +673,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   farmLocation: {
-    color: '#667085',
+    color: '#66736B',
     fontSize: 12,
     marginTop: 3,
   },
@@ -665,12 +684,12 @@ const styles = StyleSheet.create({
   },
   metaItem: {
     flex: 1,
-    backgroundColor: '#F3F6EF',
-    borderRadius: 8,
+    backgroundColor: '#F4F7EF',
+    borderRadius: 10,
     padding: 10,
   },
   metaLabel: {
-    color: '#667085',
+    color: '#66736B',
     fontSize: 11,
     fontWeight: '700',
   },
@@ -688,9 +707,9 @@ const styles = StyleSheet.create({
   secondaryAction: {
     flex: 1,
     height: 42,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#BED9C4',
+    borderColor: '#B9DCC7',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -703,7 +722,7 @@ const styles = StyleSheet.create({
   deleteAction: {
     flex: 1,
     height: 42,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#F0C7C7',
     backgroundColor: '#FFF7F7',
@@ -718,12 +737,12 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    backgroundColor: 'rgba(15, 23, 42, 0.50)',
     justifyContent: 'flex-end',
   },
   sheet: {
     maxHeight: '92%',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
     overflow: 'hidden',
@@ -757,10 +776,10 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: '#D8DED2',
-    borderRadius: 8,
+    borderColor: '#D7DFD1',
+    borderRadius: 10,
     paddingHorizontal: 12,
-    color: '#111827',
+    color: '#101828',
     backgroundColor: '#fff',
     marginBottom: 10,
   },
@@ -772,8 +791,8 @@ const styles = StyleSheet.create({
   selectInput: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: '#D8DED2',
-    borderRadius: 8,
+    borderColor: '#D7DFD1',
+    borderRadius: 10,
     paddingHorizontal: 12,
     backgroundColor: '#fff',
     marginBottom: 10,
@@ -782,18 +801,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   selectText: {
-    color: '#111827',
+    color: '#101828',
     fontSize: 14,
     fontWeight: '600',
   },
   placeholderText: {
-    color: '#7A8275',
+    color: '#8A968B',
     fontSize: 14,
   },
   dropdownMenu: {
     borderWidth: 1,
-    borderColor: '#D8DED2',
-    borderRadius: 8,
+    borderColor: '#D7DFD1',
+    borderRadius: 10,
     backgroundColor: '#fff',
     marginTop: -6,
     marginBottom: 10,
@@ -807,7 +826,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F0F2ED',
   },
   dropdownText: {
-    color: '#111827',
+    color: '#101828',
     fontSize: 14,
   },
   twoColumns: {
@@ -827,7 +846,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     flex: 1,
     height: 46,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#D1D5DB',
     alignItems: 'center',
@@ -840,7 +859,7 @@ const styles = StyleSheet.create({
   saveButton: {
     flex: 1,
     height: 46,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: '#0B4D26',
     alignItems: 'center',
     justifyContent: 'center',

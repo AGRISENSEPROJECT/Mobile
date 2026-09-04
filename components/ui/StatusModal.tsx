@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { Animated, View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface StatusModalProps {
@@ -11,14 +11,23 @@ interface StatusModalProps {
 }
 
 export default function StatusModal({ visible, onClose, type, title, message }: StatusModalProps) {
+    const scale = React.useRef(new Animated.Value(0.96)).current;
+
     React.useEffect(() => {
         if (visible) {
+            scale.setValue(0.96);
+            Animated.spring(scale, {
+                toValue: 1,
+                friction: 8,
+                tension: 90,
+                useNativeDriver: true,
+            }).start();
             const timer = setTimeout(() => {
                 onClose();
             }, 5000); // Auto-close after 5 seconds
             return () => clearTimeout(timer);
         }
-    }, [visible]);
+    }, [visible, onClose, scale]);
 
     const getIcon = () => {
         switch (type) {
@@ -31,8 +40,8 @@ export default function StatusModal({ visible, onClose, type, title, message }: 
     const getColor = () => {
         switch (type) {
             case 'success': return '#0B4D26';
-            case 'error': return '#DC2626';
-            case 'info': return '#3B82F6';
+            case 'error': return '#D92D20';
+            case 'info': return '#2563EB';
         }
     };
 
@@ -44,10 +53,10 @@ export default function StatusModal({ visible, onClose, type, title, message }: 
             onRequestClose={onClose}
         >
             <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
+                <Animated.View style={[styles.modalContainer, { transform: [{ scale }] }]}>
                     <View style={styles.contentContainer}>
                         <View style={[styles.iconContainer, { backgroundColor: getColor() + '20' }]}>
-                            <Ionicons name={getIcon()} size={40} color={getColor()} />
+                            <Ionicons name={getIcon()} size={34} color={getColor()} />
                         </View>
 
                         <Text style={styles.title}>{title}</Text>
@@ -60,7 +69,7 @@ export default function StatusModal({ visible, onClose, type, title, message }: 
                             <Text style={styles.buttonText}>Continue</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </Animated.View>
             </View>
         </Modal>
     );
@@ -69,47 +78,48 @@ export default function StatusModal({ visible, onClose, type, title, message }: 
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Slightly darker for better focus
+        backgroundColor: 'rgba(15, 23, 42, 0.55)',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 20,
     },
     modalContainer: {
-        backgroundColor: 'white',
-        borderRadius: 30,
-        padding: 0, // Remove container padding
-        width: '90%', // Fits the page better
+        backgroundColor: '#FFFFFF',
+        borderRadius: 18,
+        padding: 0,
+        width: '100%',
         maxWidth: 360,
         alignItems: 'center',
-        overflow: 'hidden', // Ensure children don't leak out of rounded corners
+        overflow: 'hidden',
         elevation: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.3,
-        shadowRadius: 20,
+        shadowColor: '#0F172A',
+        shadowOffset: { width: 0, height: 12 },
+        shadowOpacity: 0.18,
+        shadowRadius: 24,
     },
     contentContainer: {
-        padding: 30, // Move padding here for internal elements
+        padding: 28,
         alignItems: 'center',
         width: '100%',
     },
     iconContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
+        width: 72,
+        height: 72,
+        borderRadius: 36,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
     },
     title: {
         fontSize: 22,
-        fontWeight: 'bold',
-        color: '#1F2937',
-        marginBottom: 10,
+        fontWeight: '800',
+        color: '#101828',
+        marginBottom: 8,
         textAlign: 'center',
     },
     message: {
         fontSize: 16,
-        color: '#6B7280',
+        color: '#667085',
         textAlign: 'center',
         marginBottom: 25,
         lineHeight: 22,
@@ -117,12 +127,12 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         paddingVertical: 14,
-        borderRadius: 12,
+        borderRadius: 10,
         alignItems: 'center',
     },
     buttonText: {
         color: 'white',
         fontSize: 16,
-        fontWeight: '600',
+        fontWeight: '800',
     },
 });
