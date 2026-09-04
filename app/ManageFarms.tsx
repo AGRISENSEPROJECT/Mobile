@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Modal,
   RefreshControl,
   ScrollView,
@@ -97,8 +96,10 @@ export default function ManageFarms() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingFarm, setEditingFarm] = useState<Farm | null>(null);
+  const [farmPendingDelete, setFarmPendingDelete] = useState<Farm | null>(null);
   const [form, setForm] = useState<FarmForm>(emptyForm);
   const [dropdown, setDropdown] = useState<'soilType' | 'country' | null>(null);
   const [statusModal, setStatusModal] = useState({
@@ -229,32 +230,34 @@ export default function ManageFarms() {
   };
 
   const handleDelete = (farm: Farm) => {
-    Alert.alert(
-      'Delete farm',
-      `Remove ${farm.name} from your active farms?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            setLoading(true);
-            try {
-              await authApi.deleteFarm(farm.id);
-              const preferredFarmId = await AsyncStorage.getItem('preferredFarmId');
-              if (preferredFarmId === farm.id) {
-                await AsyncStorage.removeItem('preferredFarmId');
-              }
-              showStatus('success', 'Farm removed', `${farm.name} was removed from active farms.`);
-              await loadFarms();
-            } catch (error: any) {
-              showStatus('error', 'Delete failed', error?.message || 'Please try again.');
-              setLoading(false);
-            }
-          },
-        },
-      ],
-    );
+    setFarmPendingDelete(farm);
+  };
+
+  const confirmDelete = async () => {
+    if (!farmPendingDelete || deleting) return;
+    const farm = farmPendingDelete;
+
+    setDeleting(true);
+    try {
+      await authApi.deleteFarm(farm.id);
+      const preferredFarmId = await AsyncStorage.getItem('preferredFarmId');
+      if (preferredFarmId === farm.id) {
+        await AsyncStorage.removeItem('preferredFarmId');
+      }
+      try {
+        const profile = await authApi.getProfile('');
+        if (profile?.user) await writeStoredUser(profile.user);
+      } catch {
+        // Farm list is already refreshed below.
+      }
+      setFarmPendingDelete(null);
+      showStatus('success', 'Farm removed', `${farm.name || 'This farm'} was removed from your farms.`);
+      await loadFarms();
+    } catch (error: any) {
+      showStatus('error', 'Delete failed', error?.message || 'Please try again.');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
@@ -538,6 +541,43 @@ export default function ManageFarms() {
         message={statusModal.message}
         onClose={() => setStatusModal((prev) => ({ ...prev, visible: false }))}
       />
+
+      <Modal
+        visible={Boolean(farmPendingDelete)}
+        animationType="fade"
+        transparent
+        onRequestClose={() => {
+          if (!deleting) setFarmPendingDelete(null);
+        }}
+      >
+        <View style={styles.confirmBackdrop}>
+          <View style={styles.confirmCard}>
+            <View style={styles.confirmIcon}>
+              <Ionicons name="trash-outline" size={24} color="#B91C1C" />
+            </View>
+            <Text style={styles.confirmTitle}>Delete farm?</Text>
+            <Text style={styles.confirmText}>
+              {`Are you sure you want to delete ${farmPendingDelete?.name || 'this farm'}? This removes it from your farm list.`}
+            </Text>
+            <View style={styles.confirmActions}>
+              <TouchableOpacity
+                style={styles.confirmCancel}
+                disabled={deleting}
+                onPress={() => setFarmPendingDelete(null)}
+              >
+                <Text style={styles.confirmCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.confirmDelete, deleting && styles.disabledAction]}
+                disabled={deleting}
+                onPress={confirmDelete}
+              >
+                {deleting ? <ActivityIndicator color="#fff" /> : <Text style={styles.confirmDeleteText}>Delete</Text>}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -734,6 +774,86 @@ const styles = StyleSheet.create({
   deleteActionText: {
     color: '#B91C1C',
     fontWeight: '800',
+  },
+  confirmBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.50)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  confirmCard: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    padding: 22,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8D8',
+    shadowColor: '#12351E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    elevation: 8,
+  },
+  confirmIcon: {
+    width: 58,
+    height: 58,
+    borderRadius: 16,
+    backgroundColor: '#FEE2E2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+  },
+  confirmTitle: {
+    color: '#102418',
+    fontSize: 20,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  confirmText: {
+    color: '#66736B',
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 20,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  confirmActions: {
+    flexDirection: 'row',
+    gap: 10,
+    width: '100%',
+    marginTop: 22,
+  },
+  confirmCancel: {
+    flex: 1,
+    height: 46,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#C8D3C3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  confirmCancelText: {
+    color: '#102418',
+    fontWeight: '800',
+  },
+  confirmDelete: {
+    flex: 1,
+    height: 46,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#B91C1C',
+  },
+  confirmDeleteText: {
+    color: '#FFFFFF',
+    fontWeight: '800',
+  },
+  disabledAction: {
+    opacity: 0.7,
   },
   modalBackdrop: {
     flex: 1,
