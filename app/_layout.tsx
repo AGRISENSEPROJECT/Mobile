@@ -58,6 +58,7 @@ export default function RootLayout() {
                     <Stack.Screen name="ImageCapture" options={{ headerShown: false }} />
                     <Stack.Screen name="camera-demo" options={{ headerShown: false }} />
                     <Stack.Screen name="RegisterFarm" options={{ headerShown: false }} />
+                    <Stack.Screen name="ManageFarms" options={{ headerShown: false }} />
                     <Stack.Screen name="CommunityChat" options={{ headerShown: false }} />
                     <Stack.Screen name="ContactProfile" options={{ headerShown: false }} />
                     <Stack.Screen name="Notifications" options={{ headerShown: false }} />

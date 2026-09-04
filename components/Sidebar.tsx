@@ -23,7 +23,7 @@ const SIDEBAR_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300);
 
 const menuItems = [
   { icon: 'grid-outline', activeIcon: 'grid', label: 'Dashboard', route: '/(main)/dashboard', match: ['dashboard'] },
-  { icon: 'add-circle-outline', activeIcon: 'add-circle', label: 'Register Farm', route: '/RegisterFarm', match: ['RegisterFarm'] },
+  { icon: 'map-outline', activeIcon: 'map', label: 'Manage Farms', route: '/ManageFarms', match: ['ManageFarms', 'RegisterFarm'] },
   { icon: 'leaf-outline', activeIcon: 'leaf', label: 'Recommends', route: '/recommends', match: ['recommends', 'CropRecommendation', 'IrrigationRecommendation', 'PestDiseaseRecommendation', 'FertilizerRecommendation', 'WeatherRecommendation'] },
   { icon: 'cloudy-outline', activeIcon: 'cloudy', label: 'Weather', route: '/(main)/weather', match: ['weather', 'forecast'] },
   { icon: 'people-outline', activeIcon: 'people', label: 'Community', route: '/(main)/community', match: ['community', 'CommunityChat'] },

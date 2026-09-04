@@ -406,6 +406,10 @@ export const authApi = {
         if (data.phoneNumber) payload.ownerPhone = data.phoneNumber;
         if (data.latitude != null) payload.latitude = Number(data.latitude);
         if (data.longitude != null) payload.longitude = Number(data.longitude);
+        if (data.irrigationMethod) payload.irrigationMethod = data.irrigationMethod;
+        if (Array.isArray(data.cropHistory)) payload.cropHistory = data.cropHistory;
+        if (data.farmingPractices) payload.farmingPractices = data.farmingPractices;
+        if (data.soilInformation) payload.soilInformation = data.soilInformation;
 
         return await authenticatedFetch(authApi.endpoints.registerFarm, {
             method: 'POST',
