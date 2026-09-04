@@ -880,14 +880,44 @@ export type PredictionInput = {
 
 export const predictionsApi = {
     run: async (input: PredictionInput): Promise<any> => {
+        if (input.demoSensor) {
+            return await authenticatedFetch('/api/predictions/run-sensor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    farmId: input.farmId,
+                    temperature: input.temperature,
+                    humidity: input.humidity,
+                    rainfall: input.rainfall,
+                    nitrogen: input.nitrogen,
+                    phosphorus: input.phosphorus,
+                    potassium: input.potassium,
+                    crop_type: input.cropType,
+                    soil_moisture: input.soilMoisture,
+                    metadata: {
+                        demo_sensor: true,
+                        image_selected: Boolean(input.image?.uri),
+                        image_name: input.image?.name || null,
+                    },
+                }),
+            });
+        }
+
         const formData = new FormData();
         const filename = input.image.name || `soil-${Date.now()}.jpg`;
         const type = input.image.type || 'image/jpeg';
 
         // Web needs a real Blob/File; native uses { uri, name, type }.
         if (typeof document !== 'undefined') {
-            const response = await fetch(input.image.uri);
-            const blob = await response.blob();
+            let blob: Blob;
+            if (input.demoSensor) {
+                blob = new Blob(['agrisense sensor capture'], { type });
+            } else {
+                const response = await fetch(input.image.uri);
+                blob = await response.blob();
+            }
             formData.append('image', blob, filename);
         } else {
             formData.append('image', {

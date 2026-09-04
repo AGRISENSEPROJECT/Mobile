@@ -163,7 +163,7 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
             setStatusModal({ visible: true, type: 'info', title: 'Farm Required', message: 'Please select a farm first. If you have none, register one from the sidebar.' });
             return;
         }
-        if (!image) {
+        if (!image && !demoSensorReady) {
             setStatusModal({ visible: true, type: 'info', title: 'Soil Photo Required', message: 'Please take or choose a photo of your soil.' });
             return;
         }
@@ -179,7 +179,11 @@ export default function PredictionForm({ onSuccess, firstTime }: Props) {
         try {
             const response = await predictionsApi.run({
                 farmId: selectedFarmId,
-                image,
+                image: image || {
+                    uri: '',
+                    name: 'sensor-capture.jpg',
+                    type: 'image/jpeg',
+                },
                 temperature: metrics.temperature,
                 humidity: metrics.humidity,
                 rainfall: metrics.rainfall,
