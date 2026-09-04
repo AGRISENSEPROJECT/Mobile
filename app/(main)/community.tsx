@@ -2275,7 +2275,7 @@ const styles = StyleSheet.create({
   headerIconBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2284,14 +2284,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '800',
-    color: '#111',
+    color: colors.text,
   },
   moreCircle: {
     width: 34,
     height: 34,
-    borderRadius: 17,
+    borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#111',
+    borderColor: colors.text,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2302,17 +2302,18 @@ const styles = StyleSheet.create({
     marginHorizontal: space.lg,
     marginTop: 6,
     marginBottom: 8,
-    borderRadius: radius.full,
+    borderRadius: 12,
     paddingHorizontal: 16,
     minHeight: 44,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#D0D0C4',
+    borderColor: colors.border,
   },
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#222',
+    color: colors.text,
     paddingVertical: 10,
+    fontWeight: '600',
   },
   contactHeaderRow: {
     flexDirection: 'row',
@@ -2325,7 +2326,7 @@ const styles = StyleSheet.create({
   contactTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#111',
+    color: colors.text,
   },
   addContactText: {
     fontSize: 15,
@@ -2335,7 +2336,7 @@ const styles = StyleSheet.create({
   pillToggle: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    borderRadius: radius.full,
+    borderRadius: 12,
     padding: 4,
     ...shadow.card,
   },
@@ -2343,7 +2344,7 @@ const styles = StyleSheet.create({
     minWidth: 78,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: radius.full,
+    borderRadius: 10,
     alignItems: 'center',
   },
   pillOptionActive: {
@@ -2352,7 +2353,7 @@ const styles = StyleSheet.create({
   pillText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
   },
   pillTextActive: {
     color: '#fff',
@@ -2364,10 +2365,12 @@ const styles = StyleSheet.create({
   postsList: { flex: 1 },
   conversationListEmpty: { flexGrow: 1 },
   postCard: {
-    backgroundColor: colors.cream,
+    backgroundColor: colors.surface,
     paddingHorizontal: 18,
     paddingTop: 16,
     paddingBottom: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   postCardHighlight: {
     backgroundColor: colors.brandWash,
@@ -2380,9 +2383,9 @@ const styles = StyleSheet.create({
   },
   authorInfo: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 },
   authorMeta: { flex: 1, minWidth: 0, justifyContent: 'center' },
-  profilePic: { width: 48, height: 48, borderRadius: 24, backgroundColor: '#E8E8DC' },
-  authorName: { fontWeight: '700', fontSize: 16, color: colors.forest, letterSpacing: 0.1 },
-  timeAgo: { color: '#2A2A2A', fontSize: 13, fontWeight: '400', marginTop: 2 },
+  profilePic: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brandSoft },
+  authorName: { fontWeight: '800', fontSize: 16, color: colors.forest, letterSpacing: 0.1 },
+  timeAgo: { color: colors.textMuted, fontSize: 13, fontWeight: '600', marginTop: 2 },
   moreBtn: {
     width: 36,
     height: 36,
@@ -2394,7 +2397,8 @@ const styles = StyleSheet.create({
   postContent: {
     fontSize: 14,
     lineHeight: 21,
-    color: '#222',
+    color: colors.text,
+    fontWeight: '500',
   },
   captionBlock: {
     paddingTop: 8,
@@ -2402,7 +2406,7 @@ const styles = StyleSheet.create({
   },
   postCoverWrap: {
     width: '100%',
-    borderRadius: 18,
+    borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: colors.border,
     position: 'relative',

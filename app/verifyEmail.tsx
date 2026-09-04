@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -161,73 +161,73 @@ export default function VerifyEmail() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
+        <SafeAreaView className="flex-1 bg-[#F6F8F1]">
             <View className="flex-1 px-6 items-center">
                 <Image
                     source={require('../assets/verification-illustration.png')}
-                    className="w-40 h-40 mt-20 mb-10"
+                    className="w-40 h-40 mt-16 mb-8"
                     resizeMode="contain"
                 />
 
-                <View className="w-full mb-2">
-                    <Text className="text-[#0B4D26] text-2xl font-semibold text-center">
+                <View className="w-full mb-2 bg-white rounded-2xl border border-[#E2E8D8] p-5">
+                    <Text className="text-[#102418] text-2xl font-extrabold text-center">
                         Verify your email
                     </Text>
-                    <Text className="text-gray-600 mt-2 text-center text-sm">
+                    <Text className="text-[#66736B] mt-2 text-center text-sm font-medium leading-5">
                         Please enter the 6-digit code sent to {email}
                     </Text>
-                </View>
 
-                {/* Code input: one hidden input holds the code, boxes just display it */}
-                <View className="w-full mt-6 mb-2">
-                    <View className="flex-row justify-between">
-                        {[0, 1, 2, 3, 4, 5].map((index) => (
-                            <View
-                                key={index}
-                                className={`w-[14%] h-12 bg-[#F5F5F5] rounded-md items-center justify-center border ${
-                                    index === code.length ? 'border-[#0B4D26]' : 'border-gray-200'
-                                }`}
-                            >
-                                <Text style={{ fontSize: 18 }}>{code[index] || ''}</Text>
-                            </View>
-                        ))}
+                    {/* Code input: one hidden input holds the code, boxes just display it */}
+                    <View className="w-full mt-6 mb-2">
+                        <View className="flex-row justify-between">
+                            {[0, 1, 2, 3, 4, 5].map((index) => (
+                                <View
+                                    key={index}
+                                    className={`w-[14%] h-12 bg-[#F4F7EF] rounded-xl items-center justify-center border ${
+                                        index === code.length ? 'border-[#0B4D26]' : 'border-[#D7DFD1]'
+                                    }`}
+                                >
+                                    <Text className="text-[#102418] text-lg font-extrabold">{code[index] || ''}</Text>
+                                </View>
+                            ))}
+                        </View>
+                        <TextInput
+                            ref={codeInputRef}
+                            value={code}
+                            onChangeText={handleCodeChange}
+                            keyboardType="number-pad"
+                            maxLength={6}
+                            autoFocus
+                            caretHidden
+                            autoComplete="one-time-code"
+                            textContentType="oneTimeCode"
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                opacity: 0,
+                            }}
+                        />
                     </View>
-                    <TextInput
-                        ref={codeInputRef}
-                        value={code}
-                        onChangeText={handleCodeChange}
-                        keyboardType="number-pad"
-                        maxLength={6}
-                        autoFocus
-                        caretHidden
-                        autoComplete="one-time-code"
-                        textContentType="oneTimeCode"
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            opacity: 0,
-                        }}
-                    />
-                </View>
 
-                {error ? <Text className="text-red-500 text-sm mb-2">{error}</Text> : null}
+                    {error ? <Text className="text-[#D92D20] text-sm font-semibold text-center mb-2">{error}</Text> : null}
+                </View>
 
                 <TouchableOpacity
                     onPress={handleResendCode}
                     className="mt-2"
                 >
-                    <Text className="text-[#0B4D26] text-center text-sm">Resend code</Text>
+                    <Text className="text-[#0B4D26] text-center text-sm font-extrabold">Resend code</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     onPress={handleVerify}
                     disabled={loading}
-                    className={`w-full bg-[#0B4D26] p-3.5 rounded-md mt-6 ${loading ? 'opacity-70' : ''}`}
+                    className={`w-full bg-[#0B4D26] p-4 rounded-xl mt-6 ${loading ? 'opacity-70' : ''}`}
                 >
-                    <Text className="text-white text-center font-medium">
+                    <Text className="text-white text-center font-extrabold">
                         {loading ? 'Verifying...' : 'Confirm'}
                     </Text>
                 </TouchableOpacity>
@@ -236,12 +236,12 @@ export default function VerifyEmail() {
                     onPress={handleChangeEmail}
                     className="mt-4"
                 >
-                    <Text className="text-[#0B4D26] text-sm">Change email</Text>
+                    <Text className="text-[#0B4D26] text-sm font-bold">Change email</Text>
                 </TouchableOpacity>
             </View>
 
-            <Text className="text-gray-400 text-xs text-center mb-4">
-                Copyright© 2024 AGRISCAPE. All rights reserved.
+            <Text className="text-[#8A968B] text-xs text-center mb-4 font-medium">
+                Copyright© 2024 AGRISENSE. All rights reserved.
             </Text>
 
             <StatusModal

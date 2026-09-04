@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -741,7 +741,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.92)',
     paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: radius.full,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   dayPillText: {
     color: colors.textSecondary,
@@ -774,7 +776,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   bubble: {
-    borderRadius: 16,
+    borderRadius: 14,
     paddingHorizontal: 14,
     paddingTop: 10,
     paddingBottom: 10,
@@ -782,10 +784,14 @@ const styles = StyleSheet.create({
   bubbleMine: {
     backgroundColor: colors.mint,
     borderBottomRightRadius: 6,
+    borderWidth: 1,
+    borderColor: '#C2E8D0',
   },
   bubbleTheirs: {
-    backgroundColor: '#EDEDED',
+    backgroundColor: '#FFFFFF',
     borderBottomLeftRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   senderName: {
     color: colors.forest,
@@ -794,7 +800,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   bubbleText: {
-    color: '#1A1A1A',
+    color: colors.text,
     fontSize: 15,
     lineHeight: 21,
     fontWeight: '500',
@@ -820,13 +826,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   shareCardTitle: {
-    color: '#1A1A1A',
+    color: colors.text,
     fontSize: 15,
     fontWeight: '800',
     marginBottom: 4,
   },
   shareCardSnippet: {
-    color: '#444',
+    color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 18,
     fontWeight: '500',
@@ -877,7 +883,7 @@ const styles = StyleSheet.create({
   composer: {
     backgroundColor: colors.cream,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#E5E5DC',
+    borderTopColor: colors.border,
     paddingHorizontal: space.md,
     paddingTop: space.sm,
   },
@@ -916,8 +922,10 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 42,
     maxHeight: 120,
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radius.full,
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
     paddingHorizontal: 16,
     paddingVertical: Platform.OS === 'ios' ? 10 : 8,
     fontSize: 15,
@@ -927,7 +935,7 @@ const styles = StyleSheet.create({
   sendBtn: {
     width: 42,
     height: 42,
-    borderRadius: 21,
+    borderRadius: 12,
     backgroundColor: colors.forest,
     alignItems: 'center',
     justifyContent: 'center',

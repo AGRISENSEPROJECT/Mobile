@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -563,7 +563,7 @@ export default function RegisterFarm() {
                             <TextInput
                                 style={[styles.input, !formData.province && styles.disabledDropdown]}
                                 placeholder="District"
-                                placeholderTextColor="#6B7280"
+                                placeholderTextColor="#8A968B"
                                 editable={!!formData.province}
                                 value={formData.district}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, district: text }))}
@@ -596,7 +596,7 @@ export default function RegisterFarm() {
                             <TextInput
                                 style={[styles.input, !formData.district && styles.disabledDropdown]}
                                 placeholder="Sector"
-                                placeholderTextColor="#6B7280"
+                                placeholderTextColor="#8A968B"
                                 editable={!!formData.district}
                                 value={formData.sector}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, sector: text }))}
@@ -629,7 +629,7 @@ export default function RegisterFarm() {
                             <TextInput
                                 style={[styles.input, !formData.sector && styles.disabledDropdown]}
                                 placeholder="Cell"
-                                placeholderTextColor="#6B7280"
+                                placeholderTextColor="#8A968B"
                                 editable={!!formData.sector}
                                 value={formData.cell}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, cell: text }))}
@@ -662,7 +662,7 @@ export default function RegisterFarm() {
                             <TextInput
                                 style={[styles.input, !formData.cell && styles.disabledDropdown]}
                                 placeholder="Village"
-                                placeholderTextColor="#6B7280"
+                                placeholderTextColor="#8A968B"
                                 editable={!!formData.cell}
                                 value={formData.village}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, village: text }))}
@@ -740,7 +740,7 @@ export default function RegisterFarm() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FAFDF4',
+        backgroundColor: '#F6F8F1',
     },
     header: {
         paddingHorizontal: 20,
@@ -750,14 +750,14 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     skipText: {
-        color: '#6B7280',
+        color: '#66736B',
         fontSize: 14,
-        fontWeight: '500',
+        fontWeight: '700',
     },
     skipHint: {
         paddingHorizontal: 20,
         paddingBottom: 8,
-        color: '#6B7280',
+        color: '#66736B',
         fontSize: 12,
         fontWeight: '500',
         lineHeight: 17,
@@ -767,72 +767,79 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#0B4D26',
+        fontSize: 26,
+        fontWeight: '800',
+        color: '#102418',
         marginBottom: 10,
     },
     subtitle: {
         fontSize: 14,
-        color: '#333',
+        color: '#66736B',
+        fontWeight: '500',
         lineHeight: 20,
         marginBottom: 30,
     },
     input: {
-        backgroundColor: '#E5E7E1',
-        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
         padding: 15,
         fontSize: 16,
         marginBottom: 20,
         borderWidth: 1,
-        borderColor: '#D1D5DB',
+        borderColor: '#D7DFD1',
+        color: '#102418',
+        fontWeight: '600',
     },
     dropdownTrigger: {
-        backgroundColor: '#E5E7E1',
-        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
         padding: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 15,
         borderWidth: 1,
-        borderColor: '#D1D5DB',
+        borderColor: '#D7DFD1',
     },
     disabledDropdown: {
         opacity: 0.5,
     },
     inputText: {
         fontSize: 16,
-        color: 'black',
+        color: '#102418',
+        fontWeight: '600',
     },
     placeholderText: {
         fontSize: 16,
-        color: '#6B7280',
+        color: '#8A968B',
+        fontWeight: '500',
     },
     dropdownMenu: {
         backgroundColor: 'white',
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 20,
         elevation: 4,
-        shadowColor: '#000',
+        shadowColor: '#12351E',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
         maxHeight: 200,
         overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
     },
     dropdownItem: {
         padding: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#E5E7EB',
+        borderBottomColor: '#E2E8D8',
     },
     gpsInputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#E5E7E1',
-        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#D1D5DB',
+        borderColor: '#D7DFD1',
         paddingRight: 15,
     },
     gpsIcon: {
@@ -841,33 +848,33 @@ const styles = StyleSheet.create({
     footer: {
         padding: 30,
         alignItems: 'center',
-        backgroundColor: '#FAFDF4',
+        backgroundColor: '#F6F8F1',
     },
     mainButton: {
         backgroundColor: '#0B4D26',
         width: '100%',
         padding: 18,
-        borderRadius: 10,
+        borderRadius: 12,
         alignItems: 'center',
         marginBottom: 20,
     },
     mainButtonText: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '800',
     },
     primaryButton: {
         backgroundColor: '#0B4D26',
         width: '100%',
         padding: 18,
-        borderRadius: 10,
+        borderRadius: 12,
         alignItems: 'center',
         marginTop: 12,
     },
     primaryButtonText: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '800',
     },
     errorText: {
         color: '#DC2626',
@@ -877,7 +884,7 @@ const styles = StyleSheet.create({
     },
     copyright: {
         fontSize: 10,
-        color: '#6B7280',
+        color: '#8A968B',
     },
     modalOverlay: {
         position: 'absolute',
@@ -885,7 +892,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        backgroundColor: 'rgba(15, 23, 42, 0.45)',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,
@@ -893,9 +900,11 @@ const styles = StyleSheet.create({
     successModal: {
         width: '80%',
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 18,
         padding: 30,
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
     },
     checkCircle: {
         width: 70,
@@ -908,30 +917,31 @@ const styles = StyleSheet.create({
     },
     successTitle: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: '800',
+        color: '#102418',
         marginBottom: 10,
     },
     successText: {
         textAlign: 'center',
-        color: '#4B5563',
+        color: '#66736B',
         marginBottom: 25,
     },
     continueBtn: {
         backgroundColor: '#0B4D26',
         paddingVertical: 12,
         paddingHorizontal: 40,
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 20,
     },
     continueBtnText: {
         color: 'white',
-        fontWeight: 'bold',
+        fontWeight: '800',
         fontSize: 16,
     },
     progressBarContainer: {
         width: '100%',
         height: 4,
-        backgroundColor: '#E5E7EB',
+        backgroundColor: '#E2E8D8',
         borderRadius: 2,
         overflow: 'hidden',
     },

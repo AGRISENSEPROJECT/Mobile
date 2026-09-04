@@ -124,34 +124,38 @@ export default function SignIn() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <ScrollView className="flex-1 px-4">
+        <SafeAreaView className="flex-1 bg-[#F6F8F1]">
+            <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
                 <TouchableOpacity
                     onPress={handleBackPress}
-                    className="mt-2 p-2"
+                    className="mt-2 w-11 h-11 rounded-xl bg-white items-center justify-center border border-[#E2E8D8]"
                 >
-                    <Ionicons name="arrow-back" size={24} color="#000" />
+                    <Ionicons name="arrow-back" size={22} color="#102418" />
                 </TouchableOpacity>
 
-                <View className="mt-4">
-                    <Text className="text-2xl font-bold">Sign in</Text>
+                <View className="mt-5">
+                    <Text className="text-3xl font-extrabold text-[#102418]">Welcome back</Text>
+                    <Text className="text-[#66736B] text-sm font-medium mt-2 leading-5">
+                        Sign in to check your farms, recommendations, and community updates.
+                    </Text>
                 </View>
 
-                <View className="items-center justify-center my-8">
+                <View className="items-center justify-center my-7">
                     <Image
                         source={require('../assets/login-illustration.png')}
-                        className="w-64 h-64"
+                        className="w-60 h-60"
                         resizeMode="contain"
                     />
                 </View>
 
-                <View className="space-y-6 mt-8">
+                <View className="bg-white border border-[#E2E8D8] rounded-2xl p-4 mb-10">
                     <View>
                         <TextInput
                             placeholder="Email or phone (+250...), not username"
+                            placeholderTextColor="#8A968B"
                             value={formData.identifier}
                             onChangeText={(text) => setFormData({ ...formData, identifier: text })}
-                            className={`bg-gray-100 mb-4 p-4 rounded-lg ${errors.identifier ? 'border-red-500 border' : ''}`}
+                            className={`bg-[#F4F7EF] mb-3 px-4 py-4 rounded-xl border ${errors.identifier ? 'border-[#D92D20]' : 'border-[#D7DFD1]'} text-[#101828] font-semibold`}
                             keyboardType="email-address"
                             autoCapitalize="none"
                         />
@@ -163,17 +167,18 @@ export default function SignIn() {
                     <View className="relative">
                         <TextInput
                             placeholder="Password"
+                            placeholderTextColor="#8A968B"
                             value={formData.password}
                             onChangeText={(text) => setFormData({ ...formData, password: text })}
                             secureTextEntry={!showPassword}
-                            className={`bg-gray-100 p-4 mb-4 rounded-lg ${errors.password ? 'border-red-500 border' : ''}`}
+                            className={`bg-[#F4F7EF] px-4 py-4 pr-12 mb-3 rounded-xl border ${errors.password ? 'border-[#D92D20]' : 'border-[#D7DFD1]'} text-[#101828] font-semibold`}
                         />
                         {errors.password ? <Text className="text-red-500 text-sm mt-1">{errors.password}</Text> : null}
                         <TouchableOpacity
                             onPress={() => setShowPassword(!showPassword)}
                             className="absolute right-4 top-4"
                         >
-                            <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="gray" />
+                            <Ionicons name={showPassword ? "eye-off" : "eye"} size={22} color="#66736B" />
                         </TouchableOpacity>
                     </View>
 
@@ -181,42 +186,42 @@ export default function SignIn() {
                         onPress={() => router.push('/forgot-password')}
                         className="items-end"
                     >
-                        <Text className="text-[#0B4D26] text-sm">Forgot your password? Reset here</Text>
+                        <Text className="text-[#0B4D26] text-sm font-bold">Forgot password?</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={handleSignIn}
                         disabled={loading}
-                        className={`bg-[#0B4D26] p-4 rounded-lg mt-4 ${loading ? 'opacity-70' : ''}`}
+                        className={`bg-[#0B4D26] p-4 rounded-xl mt-5 shadow ${loading ? 'opacity-70' : ''}`}
                     >
-                        <Text className="text-white text-center font-semibold text-lg">
+                        <Text className="text-white text-center font-extrabold text-base">
                             {loading ? 'Logging in...' : 'Login'}
                         </Text>
                     </TouchableOpacity>
 
                     <View className="mt-8">
-                        <Text className="text-center text-gray-500 mb-4">or sign in with</Text>
+                        <Text className="text-center text-[#8A968B] mb-4 font-semibold">or sign in with</Text>
 
                         <View className="flex-row justify-center space-x-6">
-                            <TouchableOpacity className="p-2">
+                            <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#FFF7E6] items-center justify-center">
                                 <AntDesign name="google" size={24} color="#DB4437" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="p-2">
+                            <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#EEF3FF] items-center justify-center">
                                 <Ionicons name="logo-facebook" size={24} color="#4267B2" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="p-2">
+                            <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#EAF7FF] items-center justify-center">
                                 <AntDesign name="twitter" size={24} color="#1DA1F2" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="p-2">
+                            <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#FFF0F6] items-center justify-center">
                                 <AntDesign name="instagram" size={24} color="#E1306C" />
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <View className="flex-row justify-center mt-8 mb-10">
-                        <Text className="text-gray-500">Don&apos;t have an account? </Text>
+                    <View className="flex-row justify-center mt-8">
+                        <Text className="text-[#66736B] font-medium">Don&apos;t have an account? </Text>
                         <TouchableOpacity onPress={() => router.push('/signup')}>
-                            <Text className="text-[#0B4D26] font-semibold">Sign up</Text>
+                            <Text className="text-[#0B4D26] font-extrabold">Sign up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

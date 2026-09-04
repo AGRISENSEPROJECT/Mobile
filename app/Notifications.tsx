@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { colors, radius, space } from '@/constants/theme';
+import { colors, space } from '@/constants/theme';
 import { useNotifications } from '@/context/NotificationContext';
 import NotificationRow from '@/components/NotificationRow';
 import { ConversationSkeleton } from '@/components/ui/Skeleton';
@@ -266,6 +266,7 @@ const styles = StyleSheet.create({
   headerBtn: {
     width: 40,
     height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
   filterChip: {
     minHeight: 36,
     paddingHorizontal: 14,
-    borderRadius: radius.full,
+    borderRadius: 12,
     backgroundColor: colors.searchFill,
     alignItems: 'center',
     justifyContent: 'center',
@@ -319,7 +320,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#E4E4DC',
+    backgroundColor: colors.border,
     marginLeft: 68,
   },
   emptyWrap: {
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
   emptyIcon: {
     width: 64,
     height: 64,
-    borderRadius: 32,
+    borderRadius: 14,
     backgroundColor: colors.brandSoft,
     alignItems: 'center',
     justifyContent: 'center',
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     paddingVertical: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#E4E4DC',
+    borderBottomColor: colors.border,
   },
   menuCancel: {
     borderBottomWidth: 0,

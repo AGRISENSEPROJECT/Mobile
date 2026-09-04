@@ -625,7 +625,7 @@ export default function Dashboard() {
                                 onPress={() => toggleAccordion(`disease-${index}`)}
                             >
                                 <PayloadRows payload={rec.payload} />
-                                <Text style={[dashStyles.bodyText, { marginTop: 8, color: '#6B7280', fontSize: 12 }]}>
+                                <Text style={[dashStyles.bodyText, { marginTop: 8, color: '#66736B', fontSize: 12 }]}>
                                     Informational only — satellite data coming soon
                                 </Text>
                             </AccordionCard>
@@ -653,7 +653,7 @@ export default function Dashboard() {
     }
 
     return (
-        <View className="flex-1 bg-[#FAF9F6]">
+        <View className="flex-1 bg-[#F6F8F1]">
             <ScrollView
                 className="flex-1"
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#0B4D26']} />}
@@ -698,7 +698,7 @@ export default function Dashboard() {
                         <Ionicons name="search-outline" size={20} color="#0B4D26" />
                         <TextInput
                             placeholder="Search farms, crops, tips..."
-                            placeholderTextColor="#6B7280"
+                            placeholderTextColor="#8A968B"
                             style={dashStyles.searchInput}
                         />
                     </View>
@@ -978,19 +978,21 @@ const dashStyles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 18,
         backgroundColor: '#fff',
-        borderRadius: 14,
+        borderRadius: 12,
         paddingHorizontal: 12,
         paddingVertical: 10,
-        shadowColor: '#000',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
+        shadowColor: '#12351E',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 6,
+        shadowOpacity: 0.07,
+        shadowRadius: 8,
         elevation: 2,
     },
     searchInput: {
         flex: 1,
         marginLeft: 8,
-        color: '#111827',
+        color: '#102418',
         fontSize: 14,
         fontWeight: '500',
         paddingVertical: 0,
@@ -1008,13 +1010,13 @@ const dashStyles = StyleSheet.create({
     sectionTitle: {
         fontSize: 20,
         fontWeight: '800',
-        color: '#111827',
+        color: '#102418',
     },
     sectionSubtitle: {
         marginTop: 2,
         fontSize: 12,
         fontWeight: '600',
-        color: '#6B7280',
+        color: '#66736B',
     },
     seeAll: {
         color: '#0B4D26',
@@ -1031,14 +1033,16 @@ const dashStyles = StyleSheet.create({
     },
     carouselLoading: {
         height: 168,
-        borderRadius: 18,
-        backgroundColor: '#F3F4F6',
+        borderRadius: 14,
+        backgroundColor: '#F4F7EF',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
         alignItems: 'center',
         justifyContent: 'center',
     },
     emptyPostsCard: {
         height: 168,
-        borderRadius: 18,
+        borderRadius: 14,
         overflow: 'hidden',
     },
     emptyPostsBg: {
@@ -1066,7 +1070,7 @@ const dashStyles = StyleSheet.create({
     emptyPostsCta: {
         alignSelf: 'flex-start',
         backgroundColor: '#fff',
-        borderRadius: 999,
+        borderRadius: 12,
         paddingHorizontal: 14,
         paddingVertical: 8,
     },
@@ -1077,7 +1081,7 @@ const dashStyles = StyleSheet.create({
     },
     postCard: {
         height: 176,
-        borderRadius: 18,
+        borderRadius: 14,
         overflow: 'hidden',
         backgroundColor: '#0B4D26',
     },
@@ -1136,7 +1140,7 @@ const dashStyles = StyleSheet.create({
         alignItems: 'center',
         gap: 4,
         backgroundColor: 'rgba(255,255,255,0.92)',
-        borderRadius: 999,
+        borderRadius: 10,
         paddingHorizontal: 8,
         paddingVertical: 4,
     },
@@ -1179,7 +1183,7 @@ const dashStyles = StyleSheet.create({
         width: 7,
         height: 7,
         borderRadius: 4,
-        backgroundColor: '#D1D5DB',
+        backgroundColor: '#C8D3C3',
     },
     dotActive: {
         width: 18,
@@ -1187,14 +1191,14 @@ const dashStyles = StyleSheet.create({
     },
     accordion: {
         backgroundColor: '#fff',
-        borderRadius: 14,
+        borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: '#E2E8D8',
         overflow: 'hidden',
-        shadowColor: '#000',
+        shadowColor: '#12351E',
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.07,
-        shadowRadius: 3,
+        shadowOpacity: 0.06,
+        shadowRadius: 6,
         elevation: 2,
     },
     accordionHeader: {
@@ -1205,63 +1209,63 @@ const dashStyles = StyleSheet.create({
         paddingVertical: 14,
     },
     accordionTitleRow: { flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 },
-    accordionTitle: { color: '#111827', fontWeight: '700', fontSize: 15, flexShrink: 1 },
+    accordionTitle: { color: '#102418', fontWeight: '800', fontSize: 15, flexShrink: 1 },
     accordionBody: {
         paddingHorizontal: 16,
         paddingBottom: 14,
         paddingTop: 2,
-        backgroundColor: '#FAFAF7',
+        backgroundColor: '#FBFCF7',
         borderTopWidth: 1,
-        borderTopColor: '#F3F4F6',
+        borderTopColor: '#E2E8D8',
     },
-    bodyText: { color: '#374151', fontSize: 14, fontWeight: '600', lineHeight: 21, marginBottom: 4 },
-    bodyLabel: { color: '#111827', fontWeight: '700' },
-    highlight: { color: '#34643F', fontWeight: '700' },
+    bodyText: { color: '#4D5B50', fontSize: 14, fontWeight: '600', lineHeight: 21, marginBottom: 4 },
+    bodyLabel: { color: '#102418', fontWeight: '800' },
+    highlight: { color: '#0B4D26', fontWeight: '800' },
     link: { color: '#166534', fontWeight: '700', fontSize: 13 },
     soilRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
-    soilLabel: { color: '#374151', fontWeight: '600', fontSize: 14 },
-    soilValue: { color: '#111827', fontWeight: '700', fontSize: 14, marginLeft: 12, flexShrink: 1, textAlign: 'right' },
+    soilLabel: { color: '#4D5B50', fontWeight: '600', fontSize: 14 },
+    soilValue: { color: '#102418', fontWeight: '800', fontSize: 14, marginLeft: 12, flexShrink: 1, textAlign: 'right' },
     emptyCard: {
         backgroundColor: '#fff',
-        borderRadius: 14,
+        borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: '#E2E8D8',
         padding: 20,
         alignItems: 'center',
     },
     emptyIcon: {
         width: 56,
         height: 56,
-        borderRadius: 28,
-        backgroundColor: '#E8F5E9',
+        borderRadius: 14,
+        backgroundColor: '#E5F4EA',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    emptyTitle: { color: '#111827', fontWeight: '700', fontSize: 17, marginTop: 12 },
-    emptySubtitle: { color: '#4B5563', fontWeight: '500', fontSize: 13, textAlign: 'center', marginTop: 6, lineHeight: 19 },
-    primaryBtn: { backgroundColor: '#0B4D26', borderRadius: 10, paddingHorizontal: 22, paddingVertical: 12, marginTop: 14 },
-    primaryBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+    emptyTitle: { color: '#102418', fontWeight: '800', fontSize: 17, marginTop: 12 },
+    emptySubtitle: { color: '#66736B', fontWeight: '600', fontSize: 13, textAlign: 'center', marginTop: 6, lineHeight: 19 },
+    primaryBtn: { backgroundColor: '#0B4D26', borderRadius: 12, paddingHorizontal: 22, paddingVertical: 12, marginTop: 14 },
+    primaryBtnText: { color: '#fff', fontWeight: '800', fontSize: 14 },
     chip: {
         paddingHorizontal: 14,
         paddingVertical: 10,
-        borderRadius: 999,
+        borderRadius: 12,
         backgroundColor: '#fff',
         marginRight: 8,
         borderWidth: 1.5,
-        borderColor: '#D1D5DB',
+        borderColor: '#C8D3C3',
         minHeight: 40,
         justifyContent: 'center',
     },
     chipActive: {
         backgroundColor: '#0B4D26',
         borderColor: '#0B4D26',
-        shadowColor: '#0B4D26',
+        shadowColor: '#12351E',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 3,
     },
-    chipText: { color: '#4B5563', fontWeight: '700', fontSize: 13 },
+    chipText: { color: '#4D5B50', fontWeight: '700', fontSize: 13 },
     chipTextActive: { color: '#fff', fontWeight: '800' },
 });
 
@@ -1269,7 +1273,7 @@ const styles = StyleSheet.create({
     // Inline shadows avoid a NativeWind + Expo Router race that throws
     // a misleading "Couldn't find a navigation context" error.
     cardShadow: {
-        shadowColor: '#000',
+        shadowColor: '#12351E',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.08,
         shadowRadius: 2,
@@ -1277,7 +1281,7 @@ const styles = StyleSheet.create({
     },
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(15, 23, 42, 0.45)',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
@@ -1285,14 +1289,16 @@ const styles = StyleSheet.create({
     modalContent: {
         width: '100%',
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 18,
         padding: 20,
         maxHeight: '70%',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
     },
     modalTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
-        color: '#0B4D26',
+        fontWeight: '800',
+        color: '#102418',
         marginBottom: 20,
         textAlign: 'center',
     },
@@ -1305,25 +1311,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 15,
         borderRadius: 12,
-        backgroundColor: '#F3F4F6',
+        backgroundColor: '#F4F7EF',
+        borderWidth: 1,
+        borderColor: '#E2E8D8',
         marginBottom: 10,
     },
     activeFarmItem: {
-        backgroundColor: '#E8F5E9',
+        backgroundColor: '#E5F4EA',
         borderWidth: 1,
         borderColor: '#0B4D26',
     },
     farmName: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#374151',
+        color: '#102418',
     },
     activeFarmText: {
         color: '#0B4D26',
     },
     farmLocation: {
         fontSize: 12,
-        color: '#6B7280',
+        color: '#66736B',
         marginTop: 2,
     },
     addFarmBtn: {
@@ -1332,7 +1340,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 15,
         borderTopWidth: 1,
-        borderTopColor: '#E5E7EB',
+        borderTopColor: '#E2E8D8',
         marginTop: 10,
     },
     addFarmText: {

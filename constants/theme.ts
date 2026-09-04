@@ -5,25 +5,25 @@
 export const colors = {
   brand: '#0B4D26',
   brandMid: '#166534',
-  brandSoft: '#E8F5E9',
-  brandWash: '#F0FDF4',
-  brandMuted: '#BBF7D0',
+  brandSoft: '#E5F4EA',
+  brandWash: '#F1F8F0',
+  brandMuted: '#BCE8C9',
 
-  bg: '#F4F7F2',
-  cream: '#FCFDF5',
-  forest: '#34643F',
-  mint: '#D8EDE3',
-  searchFill: '#E4E5D8',
+  bg: '#F6F8F1',
+  cream: '#FBFCF7',
+  forest: '#0B4D26',
+  mint: '#D9F2E2',
+  searchFill: '#F1F4EC',
   surface: '#FFFFFF',
-  surfaceMuted: '#F8FAF8',
+  surfaceMuted: '#F4F7EF',
 
-  text: '#111827',
-  textSecondary: '#4B5563',
-  textMuted: '#9CA3AF',
+  text: '#102418',
+  textSecondary: '#66736B',
+  textMuted: '#8A968B',
   textOnBrand: '#FFFFFF',
 
-  border: '#E5E7EB',
-  borderStrong: '#D1D5DB',
+  border: '#E2E8D8',
+  borderStrong: '#C8D3C3',
 
   danger: '#DC2626',
   dangerSoft: '#FEF2F2',
@@ -61,14 +61,14 @@ export const type = {
 
 export const shadow = {
   card: {
-    shadowColor: '#000',
+    shadowColor: '#12351E',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.06,
     shadowRadius: 4,
     elevation: 2,
   },
   float: {
-    shadowColor: '#000',
+    shadowColor: '#12351E',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,

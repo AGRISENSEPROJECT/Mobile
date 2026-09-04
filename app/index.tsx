@@ -74,26 +74,33 @@ export default function Home() {
 
   if (checking) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-[#F6F8F1] items-center justify-center">
         <ActivityIndicator size="large" color="#0B4D26" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="w-screen h-screen bg-white">
-      <View className="flex-1 items-center justify-center p-4">
-        <Image
-          source={require('../assets/icon.png')}
-          className="w-40 h-40 mb-8"
-          resizeMode="contain"
-        />
+    <SafeAreaView className="w-screen h-screen bg-[#F6F8F1]">
+      <View className="flex-1 items-center justify-center p-6">
+        <View className="w-48 h-48 rounded-3xl bg-white items-center justify-center border border-[#E2E8D8] mb-8">
+          <Image
+            source={require('../assets/icon.png')}
+            className="w-36 h-36"
+            resizeMode="contain"
+          />
+        </View>
+
+        <Text className="text-[#102418] text-3xl font-extrabold text-center mb-2">AgriSense</Text>
+        <Text className="text-[#66736B] text-sm font-medium text-center leading-5 mb-8 max-w-[280px]">
+          Soil insights, crop advice, weather, and farmer community in one place.
+        </Text>
 
         <TouchableOpacity
-          className="bg-[#0B4D26] px-14 py-3 rounded-xl"
+          className="bg-[#0B4D26] px-14 py-4 rounded-xl"
           onPress={() => router.push('/signin')}
         >
-          <Text className="text-white text-lg font-semibold">Get Started</Text>
+          <Text className="text-white text-base font-extrabold">Get Started</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
