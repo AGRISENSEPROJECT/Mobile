@@ -468,7 +468,7 @@ export default function ContactProfile() {
                   ) : (
                     <Text style={styles.saveNameText}>Save</Text>
                   )}
-                </TouchableOpacity>
+            </TouchableOpacity>
               </View>
             ) : (
               <>
@@ -585,7 +585,7 @@ export default function ContactProfile() {
           )}
         </ScrollView>
       )}
-      </View>
+        </View>
 
       <Modal visible={addMembersVisible} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
@@ -663,7 +663,7 @@ export default function ContactProfile() {
               )}
             </TouchableOpacity>
           </View>
-        </View>
+          </View>
       </Modal>
 
       <Modal
@@ -747,7 +747,7 @@ export default function ContactProfile() {
               </Text>
             </TouchableOpacity>
           </TouchableOpacity>
-        </TouchableOpacity>
+          </TouchableOpacity>
       </Modal>
 
       <StatusModal
@@ -757,7 +757,7 @@ export default function ContactProfile() {
         message={statusModal.message}
         onClose={() => setStatusModal((s) => ({ ...s, visible: false }))}
       />
-    </View>
+        </View>
   );
 }
 

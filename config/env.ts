@@ -1,6 +1,7 @@
 const ENV = {
     API_URL: process.env.EXPO_PUBLIC_API_URL,
     OPENWEATHER_API_KEY: process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY,
+    GOOGLE_WEB_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
 };
 
 export default ENV;

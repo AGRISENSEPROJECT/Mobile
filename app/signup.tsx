@@ -1,11 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { authApi } from '@/services/api';
 import StatusModal from '@/components/ui/StatusModal';
 import { validateStrongPassword } from '@/utils/password';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 
 export default function Signup() {
     const router = useRouter();
@@ -35,6 +36,22 @@ export default function Signup() {
     });
     const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+
+    const showGoogleFeedback = useCallback(
+        (feedback: { type: 'error' | 'success' | 'info'; title: string; message: string }) => {
+            setStatusModal({
+                visible: true,
+                type: feedback.type,
+                title: feedback.title,
+                message: feedback.message,
+            });
+        },
+        [],
+    );
+
+    const { signInWithGoogle, loading: googleLoading } = useGoogleAuth({
+        onFeedback: showGoogleFeedback,
+    });
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -254,9 +271,22 @@ export default function Signup() {
                     <View className="mt-8 space-y-4">
                         <Text className="text-center text-[#8A968B] font-semibold">or continue with</Text>
 
-                        <TouchableOpacity className="flex-row items-center mb-4 justify-center space-x-2 border border-[#D7DFD1] bg-[#FAFBF7] p-4 rounded-xl">
-                            <AntDesign name="google" size={24} color="#DB4437" />
-                            <Text className="text-[#102418] font-bold ml-2">Continue with Google</Text>
+                        <TouchableOpacity
+                            onPress={signInWithGoogle}
+                            disabled={googleLoading}
+                            className={`flex-row items-center mb-4 justify-center space-x-2 border border-[#D7DFD1] bg-[#FAFBF7] p-4 rounded-xl ${
+                                googleLoading ? 'opacity-60' : ''
+                            }`}
+                            accessibilityLabel="Continue with Google"
+                        >
+                            {googleLoading ? (
+                                <ActivityIndicator size="small" color="#DB4437" />
+                            ) : (
+                                <AntDesign name="google" size={24} color="#DB4437" />
+                            )}
+                            <Text className="text-[#102418] font-bold ml-2">
+                                {googleLoading ? 'Connecting…' : 'Continue with Google'}
+                            </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity className="flex-row items-center justify-center space-x-2 bg-[#EEF3FF] p-4 rounded-xl">

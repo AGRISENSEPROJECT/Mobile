@@ -152,6 +152,7 @@ export const authApi = {
     endpoints: {
         register: '/api/auth/register',
         login: '/api/auth/login',
+        googleVerifyToken: '/api/auth/google/verify-token',
         profile: '/api/auth/profile',
         updateProfile: '/api/auth/profile',
         uploadProfileImage: '/api/auth/profile/image',
@@ -243,6 +244,25 @@ export const authApi = {
             const result = await parseJsonSafe(response);
             if (!response.ok) {
                 throw new Error(apiErrorMessage(result, 'Login failed'));
+            }
+            return result;
+        } catch (error: any) {
+            throw new Error(error.message || 'Network error');
+        }
+    },
+
+    verifyGoogleToken: async (idToken: string): Promise<SigninResponse> => {
+        try {
+            const response = await fetch(`${ENV.API_URL}${authApi.endpoints.googleVerifyToken}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idToken }),
+            });
+            const result = await parseJsonSafe(response);
+            if (!response.ok) {
+                throw new Error(apiErrorMessage(result, 'Google sign-in failed'));
             }
             return result;
         } catch (error: any) {

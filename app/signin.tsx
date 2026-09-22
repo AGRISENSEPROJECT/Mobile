@@ -1,6 +1,6 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, BackHandler } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, BackHandler, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 
@@ -9,6 +9,7 @@ import StatusModal from '@/components/ui/StatusModal';
 import { isFarmerRole } from '@/utils/userDisplay';
 import { getPostAuthRoute, persistAuthSession } from '@/utils/session';
 import { useSidebar } from '@/context/SidebarContext';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 
 const PHONE_RE = /^\+?[1-9]\d{1,14}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,6 +33,22 @@ export default function SignIn() {
         password: '',
     });
     const [showPassword, setShowPassword] = useState(false);
+
+    const showGoogleFeedback = useCallback(
+        (feedback: { type: 'error' | 'success' | 'info'; title: string; message: string }) => {
+            setStatusModal({
+                visible: true,
+                type: feedback.type,
+                title: feedback.title,
+                message: feedback.message,
+            });
+        },
+        [],
+    );
+
+    const { signInWithGoogle, loading: googleLoading } = useGoogleAuth({
+        onFeedback: showGoogleFeedback,
+    });
 
     const validateForm = () => {
         const id = formData.identifier.trim();
@@ -203,8 +220,19 @@ export default function SignIn() {
                         <Text className="text-center text-[#8A968B] mb-4 font-semibold">or sign in with</Text>
 
                         <View className="flex-row justify-center space-x-6">
-                            <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#FFF7E6] items-center justify-center">
-                                <AntDesign name="google" size={24} color="#DB4437" />
+                            <TouchableOpacity
+                                onPress={signInWithGoogle}
+                                disabled={loading || googleLoading}
+                                className={`w-11 h-11 rounded-xl bg-[#FFF7E6] items-center justify-center ${
+                                    loading || googleLoading ? 'opacity-60' : ''
+                                }`}
+                                accessibilityLabel="Sign in with Google"
+                            >
+                                {googleLoading ? (
+                                    <ActivityIndicator size="small" color="#DB4437" />
+                                ) : (
+                                    <AntDesign name="google" size={24} color="#DB4437" />
+                                )}
                             </TouchableOpacity>
                             <TouchableOpacity className="w-11 h-11 rounded-xl bg-[#EEF3FF] items-center justify-center">
                                 <Ionicons name="logo-facebook" size={24} color="#4267B2" />
