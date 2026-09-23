@@ -10,6 +10,7 @@ export const SESSION_KEYS = [
   'user',
   'skipFarm',
   'preferredFarmId',
+  'demoMode',
 ] as const;
 
 export async function clearSession(): Promise<void> {
@@ -21,6 +22,7 @@ export async function persistAuthSession(data: {
   refreshToken?: string | null;
   user: AuthUser;
 }): Promise<void> {
+  await AsyncStorage.removeItem('demoMode');
   await AsyncStorage.setItem('token', data.accessToken);
   if (data.refreshToken) {
     await AsyncStorage.setItem('refreshToken', data.refreshToken);

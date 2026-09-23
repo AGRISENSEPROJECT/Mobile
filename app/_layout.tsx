@@ -46,6 +46,7 @@ export default function RootLayout() {
                     <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
                     <Stack.Screen name="reset-password" options={{ headerShown: false }} />
                     <Stack.Screen name="(main)" options={{ headerShown: false }} />
+                    <Stack.Screen name="demo" options={{ headerShown: false }} />
                     <Stack.Screen name="SoilDetails" options={{ headerShown: false }} />
                     <Stack.Screen name="ResultsPage" options={{ headerShown: false }} />
                     <Stack.Screen name="DataScanned" options={{ headerShown: false }} />

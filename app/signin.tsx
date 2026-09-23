@@ -10,6 +10,8 @@ import { isFarmerRole } from '@/utils/userDisplay';
 import { getPostAuthRoute, persistAuthSession } from '@/utils/session';
 import { useSidebar } from '@/context/SidebarContext';
 import { useGoogleAuth } from '@/hooks/useGoogleAuth';
+import { DEMO_CREDENTIALS, DEMO_FARMER, DEMO_MODE_ENABLED } from '@/constants/demoFarmer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PHONE_RE = /^\+?[1-9]\d{1,14}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -81,6 +83,23 @@ export default function SignIn() {
         setLoading(true);
         try {
             const id = formData.identifier.trim();
+
+            if (
+                DEMO_MODE_ENABLED &&
+                id.toLowerCase() === DEMO_CREDENTIALS.email &&
+                formData.password === DEMO_CREDENTIALS.password
+            ) {
+                await AsyncStorage.multiSet([
+                    ['demoMode', 'true'],
+                    ['token', 'demo-session-token'],
+                    ['user', JSON.stringify(DEMO_FARMER)],
+                    ['preferredFarmId', DEMO_FARMER.activeFarmId],
+                ]);
+                await applyUser(DEMO_FARMER);
+                router.replace('/demo/dashboard' as never);
+                return;
+            }
+
             const payload = id.includes('@')
                 ? { email: id, password: formData.password }
                 : { phoneNumber: id.replace(/[\s-]/g, ''), password: formData.password };
@@ -166,6 +185,30 @@ export default function SignIn() {
                 </View>
 
                 <View className="bg-white border border-[#E2E8D8] rounded-2xl p-4 mb-10">
+                    {DEMO_MODE_ENABLED ? (
+                        <View className="bg-[#FFF7E2] border border-[#F2D99B] rounded-xl p-3 mb-4">
+                            <View className="flex-row items-center">
+                                <Ionicons name="sparkles" size={18} color="#8A5A00" />
+                                <Text className="text-[#694500] font-extrabold ml-2">Farmer journey demo</Text>
+                            </View>
+                            <Text className="text-[#80622A] text-xs mt-1 leading-4">
+                                Load the assessment account, then tap Login to enter the simulated farmer journey.
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setFormData({
+                                        identifier: DEMO_CREDENTIALS.email,
+                                        password: DEMO_CREDENTIALS.password,
+                                    });
+                                    setErrors({ identifier: '', password: '' });
+                                }}
+                                className="bg-white border border-[#E9CD88] rounded-lg py-2.5 mt-3"
+                                accessibilityLabel="Fill demo farmer credentials"
+                            >
+                                <Text className="text-[#765000] text-center text-sm font-extrabold">Use demo farmer account</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : null}
                     <View>
                         <TextInput
                             placeholder="Email or phone (+250...), not username"

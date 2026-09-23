@@ -7,6 +7,7 @@ import ENV from '@/config/env';
 import { authApi } from '@/services/api';
 import { isFarmerRole } from '@/utils/userDisplay';
 import { clearSession, getPostAuthRoute, writeStoredUser } from '@/utils/session';
+import { DEMO_MODE_ENABLED } from '@/constants/demoFarmer';
 
 const API_URL_KEY = 'api_url_bound';
 
@@ -17,6 +18,17 @@ export default function Home() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const demoMode = await AsyncStorage.getItem('demoMode');
+        if (demoMode === 'true') {
+          if (DEMO_MODE_ENABLED) {
+            router.replace('/demo/dashboard' as never);
+            return;
+          }
+          await clearSession();
+          setChecking(false);
+          return;
+        }
+
         const currentApi = ENV.API_URL || '';
         const boundApi = await AsyncStorage.getItem(API_URL_KEY);
 
